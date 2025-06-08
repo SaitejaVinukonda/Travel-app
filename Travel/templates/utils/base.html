@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+
+{% include './head.html' %}
+  <body>
+    
+    {% include './preloader.html' %}
+
+    <!-- Start Header Section -->
+    {% include './header.html' %}
+    
+
+    {% include './header_search.html' %}
+    <!-- End Header Section -->
+
+     {% block content %}
+
+    {% endblock %}
+    
+    <!-- Start footer -->
+    {% include './footer.html' %}
+    <!-- End footer -->
+
+    <!-- Script -->
+    {% include './script.html' %}
+
+  </body>
+</html>
