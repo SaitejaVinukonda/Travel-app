@@ -9,6 +9,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
    <style>
    .card, .card1, .card2, .card3 {
+    background-color: rgba(255, 255, 255, 0.8);
     border: 1px solid hsl(0, 0%, 80%);
     border-radius: 10px;
     box-shadow: 5px 5px 5px hsl(0, 0%, 0%, 0.1);
@@ -27,6 +28,12 @@
     border-radius: 50%;
     margin-bottom: 10px;
 }
+body{
+background-image: url("{% static 'images/Travel3.jpg' %}");
+            background-repeat: no-repeat;
+            background-size: cover;
+}
+
 </style>
 
     </head>
@@ -63,5 +70,19 @@
     <a href="tel:+919032550282">+91 9032550282</a>  
 </div>
 </div>
+ <h2 class="text-center">Feedback Form</h2>
+  <form action="/submit-feedback" method="post" class="container mt-4 col-md-3">
+    <label for="name"><b>Name:</b></label>
+    <input type="text" id="name" name="name" class="form-control my-2" required><br>
+
+    <label for="email"><b>Email:</b></label>
+    <input type="email" id="email" name="email" class="form-control my-2" required><br>
+
+    <label for="feedback"><b>FeedBack:</b></label>
+    <textarea id="feedback" name="feedback" rows="5" class="form-control my-2" required></textarea><br>
+    <div class="text-center">
+                <button type="submit" class="btn btn-primary">Submit Feedback</button>
+  </form>
+
 </body>
 </html>
