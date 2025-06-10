@@ -42,3 +42,14 @@ def register_view(request):
             return redirect('login')
 
     return render(request, 'register.html', {'error': error})
+
+def forgot_password(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        # Check if email exists, then send reset link
+        # For now, just show a dummy message
+        if email:
+            return render(request, 'forgot_password.html', {'message': 'Password reset link sent to your email.'})
+        else:
+            return render(request, 'forgot_password.html', {'error': 'Email not found.'})
+    return render(request, 'forgot_password.html')
