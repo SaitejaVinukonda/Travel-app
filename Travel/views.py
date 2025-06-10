@@ -8,8 +8,6 @@ def about(request):
     return render(request,'about.html')
 def contact(request):
     return render(request,'Contacts.html')
-
-# Create your views here.
 def login_view(request):
     error = None
     if request.method == 'POST':
