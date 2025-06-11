@@ -11,12 +11,17 @@
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 
+    <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+
     <style>
         .about-section {
-            background-image: url("{% static 'images/worldmap.jpg'%}");
-            background-size: cover;
+            background-image: url("{% static 'images/7wonders.jpg'%}");
+            background-size:cover;
             background-position: center;
-            height: 490px;
+            background-repeat: no-repeat;
+            margin-top: 80px;          
+            min-height: 60vh;          
+            padding: 60px 20px;        
             position: relative;
             color: white;
         }
@@ -25,13 +30,24 @@
             background-color: rgba(0, 0, 0, 0.7);
             padding: 30px;
             border-radius: 10px;
-            width: 1000px;
+            max-width: 90%;
+            width: 100%;
             margin: 0 auto;
         }
 
         .creator-card img {
             height: 220px;
-            object-fit: cover ;
+            object-fit: cover;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .creator-card:hover img {
+            transform: scale(1.05);
+        }
+
+        .creator-card:hover {
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            transition: box-shadow 0.3s ease-in-out;
         }
 
         .meet-the-creators{
@@ -40,13 +56,23 @@
             color: white;
             padding:50px 20px;
         }
+
+        .footer-main {
+            background-color: #17a2b8; 
+        }
+
+        .footer-bottom {
+            background-color: #0f6674; 
+            color: #f1f1f1;
+        }
     </style>
 </head>
 
 <body>
 
     
-    <div class="d-flex justify-content-between align-items-center bg-info text-white px-4 py-2">
+    <div class="d-flex justify-content-between align-items-center text-white px-4 py-4" style="background-color: #17a2b8;">
+
         <div class="fs-5 fw-semibold">TRA-WELL Tourism</div>
         <div>
             <a href="#" class="text-white me-3"><i class="fab fa-instagram"></i></a>
@@ -57,7 +83,7 @@
 
     
     <section class="about-section d-flex align-items-center justify-content-center text-center">
-        <div class="about-content">
+        <div class="about-content" data-aos="fade-up">
             <h2 class="text-info mb-3">About Us</h2>
             <p class="lead">
                 TRA-WELL is your ultimate travel partner, offering curated experiences across India’s most beautiful
@@ -66,16 +92,29 @@
                 cultures,
                 we connect you to the heart of each place you visit.
             </p>
+            <p class="lead">
+                At TRA-WELL, we’re passionate about making travel not just easier, but more meaningful. Our platform is designed to help you explore India's rich heritage, natural beauty, and diverse cultures with ease and confidence. Whether you're planning your first solo trip, a family vacation, or a spontaneous weekend getaway, TRA-WELL is here to guide you every step of the way. We believe that every journey should be an experience, and we’re committed to turning your travel dreams into lasting memories.
+            </p>
+            <p class="lead">
+                TRA-WELL is your ultimate travel partner...
+            </p>
+            <p class="lead">
+                At TRA-WELL, we’re more than just a travel website—we’re a community of explorers...
+            </p>
+            <p class="lead">
+                Whether you're a solo traveler seeking adventure...
+            </p>
+
         </div>
     </section>
 
     
     <section class="meet-the-creators">
-        <h2 class="text-center text-dark mb-4">Meet the Creators</h2>
+        <h2 class="text-center text-dark mb-4" data-aos="fade-down">Meet the Creators</h2>
         <div class="row g-4">
 
             
-            <div class="col-md-6 col-lg-3">
+            <div class="col-md-6 col-lg-3" data-aos="zoom-in">
                 <div class="card shadow creator-card">
                     <img src="{% static 'images/sai.jpg'%}" class="card-img-top" alt="Creator 1">
                     <div class="card-body text-center">
@@ -87,7 +126,7 @@
             </div>
 
             
-            <div class="col-md-6 col-lg-3">
+            <div class="col-md-6 col-lg-3" data-aos="zoom-in">
                 <div class="card shadow creator-card">
                     <img src="{% static 'images/Bhavana.jpg'%}" class="card-img-top" alt="Creator 2">
                     <div class="card-body text-center">
@@ -99,7 +138,7 @@
             </div>
 
             
-            <div class="col-md-6 col-lg-3">
+            <div class="col-md-6 col-lg-3" data-aos="zoom-in">
                 <div class="card shadow creator-card">
                     <img src="{% static 'images/janaki.jpg'%}" class="card-img-top" alt="Creator 3">
                     <div class="card-body text-center">
@@ -111,7 +150,7 @@
             </div>
 
             
-            <div class="col-md-6 col-lg-3">
+            <div class="col-md-6 col-lg-3" data-aos="zoom-in">
                 <div class="card shadow creator-card">
                     <img src="{% static 'images/pikasu.jpg'%}" class="card-img-top" alt="Creator 4">
                     <div class="card-body text-center">
@@ -126,14 +165,29 @@
     </section>
 
     
-    <footer class="bg-info text-white text-center py-3">
-        &copy; 2025 TRA-WELL Tourism | Designed with ❤️ by the TRA-WELL Team
-    </footer>
+    <footer class="footer-main text-white pt-4">
+        <div class="container text-center">
+            <p class="mb-1 fw-semibold fs-5">TRA-WELL Tourism</p>
+            <p class="mb-0">Designed with ❤️ by the TRA-WELL Team</p>
+        </div>
+        <div class="footer-bottom bg-dark text-center py-2 mt-3">
+            &copy; 2025 TRA-WELL Tourism. All rights reserved.
+        </div>
+     </footer>
+
 
     
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO"
         crossorigin="anonymous"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            duration: 1000,
+            once: true,
+        });
+    </script>
 </body>
 
 </html>
