@@ -13,42 +13,72 @@
       padding: 0;
       background: linear-gradient(to right, #74ebd5, #9face6);
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .cards-container {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      color: #fff;
+      gap: 20px;
+      margin-top: 40px;
     }
 
     .card {
-      background: rgba(255, 255, 255, 0.8);
+      background: rgba(255, 255, 255, 0.85);
       border-radius: 15px;
       box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-      margin: 20px;
       text-align: center;
-      padding: 20px;
-      max-width: 300px;
+      padding: 15px;
+      width: 250px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      height: 250px; /* consistent height for all cards */
     }
 
     .card img {
-      width: 120px;
-      height: 120px;
+      width: 100px;
+      height: 100px;
       border-radius: 50%;
       object-fit: cover;
       margin-bottom: 10px;
-      border: 4px solid #fff;
+      border: 3px solid #fff;
+    }
+
+    .card h5 {
+      margin: 5px 0;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #333;
+    }
+
+    .card a {
+      color: #333;
+      text-decoration: none;
+      font-weight: 500;
+      margin: 5px 0;
+      word-wrap: break-word;
+    }
+
+    .card a:hover {
+      text-decoration: underline;
     }
 
     .feedback-wrapper {
-      width: 100%;
+      width: 90%;
       max-width: 500px;
       background: rgba(255, 255, 255, 0.2);
       border-radius: 20px;
       backdrop-filter: blur(15px);
       padding: 30px;
       box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
-      margin: 20px;
+      margin: 40px 0;
     }
 
     .feedback-wrapper h2 {
@@ -122,7 +152,7 @@
     }
 
     @media (max-width: 768px) {
-      body {
+      .cards-container {
         flex-direction: column;
         align-items: center;
       }
@@ -130,36 +160,28 @@
   </style>
 </head>
 <body>
-  <!-- Contacts Section -->
-  <div class="card">
-    <img src="{% static 'images/Sai.jpg' %}" alt="Sai">
-    <h5>Vinukonda Sai Teja</h5>
-    <a href="mailto:saitejavinukonda684@gmail.com" class="text-dark">saitejavinukonda684@gmail.com</a><br>
-    <a href="tel:+919177357684" class="text-dark">+91 9177357684</a>
+  <div class="cards-container">
+    <div class="card">
+      <img src="{% static 'images/Support.jpg' %}" alt="Support">
+      <h5>24/7 Support Available</h5>
+    </div>
+    <div class="card">
+      <img src="{% static 'images/Call.jpg' %}" alt="Call">
+      <h5>Contact</h5>
+      <a href="tel:+91xxxxxxxxxx" class="text-dark">+91 xxxxxxxxxx</a>
+    </div>
+    <div class="card">
+      <img src="{% static 'images/Mail.jpg' %}" alt="Mail">
+      <h5>Email Support</h5>
+      <a href="mailto:trawell@gmail.com" class="text-dark">trawell@gmail.com</a>
+    </div>
+    <div class="card">
+      <img src="{% static 'images/Office.jpg' %}" alt="Office">
+      <h5>Office Address</h5>
+      <p class="text-dark" style="font-size: 0.9rem; margin: 5px 0;">123, Main Street, Bangalore</p>
+    </div>
   </div>
 
-  <div class="card">
-    <img src="{% static 'images/Bhavana.jpg' %}" alt="Bhavana">
-    <h5>Gunnam Bhavana</h5>
-    <a href="mailto:bhavanagunnam2003@gmail.com" class="text-dark">bhavanagunnam2003@gmail.com</a><br>
-    <a href="tel:+916305122187" class="text-dark">+91 6305122187</a>
-  </div>
-
-  <div class="card">
-    <img src="{% static 'images/janaki.jpg' %}" alt="Janaki">
-    <h5>Piramalla Janaki Ram</h5>
-    <a href="mailto:piramallajanakiram@gmail.com" class="text-dark">piramallajanakiram@gmail.com</a><br>
-    <a href="tel:+919032475886" class="text-dark">+91 9032475886</a>
-  </div>
-
-  <div class="card">
-    <img src="{% static 'images/pikasu.jpg' %}" alt="Prakash">
-    <h5>Bolloju Surya Prakash</h5>
-    <a href="mailto:suryaprakashbolloju@gmail.com" class="text-dark">suryaprakashbolloju@gmail.com</a><br>
-    <a href="tel:+919032550282" class="text-dark">+91 9032550282</a>
-  </div>
-
-  <!-- Feedback Form -->
   <div class="feedback-wrapper">
     <h2>We Value Your Feedback!</h2>
     <form action="/submit-feedback" method="post">

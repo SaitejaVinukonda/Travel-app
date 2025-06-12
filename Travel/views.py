@@ -53,3 +53,5 @@ def forgot_password(request):
         else:
             return render(request, 'forgot_password.html', {'error': 'Email not found.'})
     return render(request, 'forgot_password.html')
+def tour(request):
+    return render(request, 'TourPackages.html')
