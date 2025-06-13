@@ -12,10 +12,16 @@
                 <li class="menu-item-has-children">
                   <a href="{% url 'home' %}">Home</a>
                   <ul>
-                    <li><a href="{% url 'home1' %}">Home v1</a></li>
+                    <li><a href="{% url 'home' %}">Home v1</a></li>
                   </ul>
                 </li>
                 <li><a href="{% url 'about' %}">About Us</a></li>
+                <li class="menu-item-has-children">
+                  <a href="{% url 'tour' %}">Tour Packages</a>
+                  <ul>
+                    <li><a href="{% url 'tour' %}">Tour Packages</a></li>
+                  </ul>
+                </li>
                 <li class="menu-item-has-children">
                   <a href="{% url 'login_view' %}">Login</a>
                   <ul>
@@ -24,7 +30,7 @@
                   </ul>
                 </li>
                 </li>
-                <li><a href="{% url 'contact' %}">Contacts</a></li>
+              <li><a href="{% url 'contact' %}">Contacts</a></li>
               </ul>
                </div>
           </div>
