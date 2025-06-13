@@ -1,0 +1,53 @@
+<!-- templates/payment.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Booking Confirmed</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f1f8f5;
+            padding: 40px;
+            text-align: center;
+        }
+        .confirmation-box {
+            background-color: #ffffff;
+            padding: 30px;
+            margin: auto;
+            max-width: 500px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .confirmation-box h2 {
+            color: #28a745;
+            margin-bottom: 20px;
+        }
+        .confirmation-box p {
+            font-size: 16px;
+            margin: 8px 0;
+        }
+        .highlight {
+            font-weight: bold;
+            color: #007bff;
+        }
+        a.button {
+            display: inline-block;
+            margin-top: 25px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border-radius: 8px;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="confirmation-box">
+        <h2>Booking Confirmed!</h2>
+        <p>Thank you for booking with us.</p>
+        <p><strong>Seats Booked:</strong> <span class="highlight">{{ booked_seats|join:", " }}</span></p>
+        <p>Your ticket has been successfully confirmed.</p>
+        <a href="{% url 'bus_list' %}" class="button">Book Another Ticket</a>
+    </div>
+</body>
+</html>
