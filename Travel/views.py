@@ -3,7 +3,7 @@ from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Bus, Seat,Booking
+from .models import Bus, Seat,Booking,TravelPackage
 def home(request):
     return render(request, 'home.html')
 def about(request):
@@ -56,7 +56,8 @@ def forgot_password(request):
             return render(request, 'forgot_password.html', {'error': 'Email not found.'})
     return render(request, 'forgot_password.html')
 def tour(request):
-    return render(request, 'TourPackages.html')
+    packages = TravelPackage.objects.all()
+    return render(request, 'TourPackages.html',{'packages': packages})
 
 def bus_list(request):
     source = request.GET.get('source')

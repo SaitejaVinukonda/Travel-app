@@ -31,3 +31,13 @@ class Booking(models.Model):
 
     def str(self):
         return f"Booking on {self.bus.operator} - {self.booked_at.strftime('%Y-%m-%d %H:%M')}"
+
+class TravelPackage(models.Model):
+    title = models.CharField(max_length=200)
+    location = models.CharField(max_length=200)
+    image = models.ImageField(upload_to='travel_images/')
+    price = models.DecimalField(max_digits=8, decimal_places=2)
+    duration = models.CharField(max_length=50) 
+
+    def __str__(self):
+        return self.title
