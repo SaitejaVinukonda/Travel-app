@@ -72,6 +72,11 @@
 </head>
 <body>
   <div class="container my-5">
+    <form class="d-flex mb-4" role="search">
+      <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+      <button class="btn btn-outline-success" type="submit">Search</button>
+    </form>
+
     <div class="card-wrapper">
       <div class="custom-card">
         <div class="card">
@@ -87,34 +92,7 @@
           </div>
         </div>
       </div>
-      <div class="custom-card">
-        <div class="card">
-          <div class="position-absolute top-0 start-0 bg-light p-1 px-2 small">3 Day 2 Night</div>
-          <img src="{% static 'images/Travel3.jpg' %}" alt="Mexico" class="card-img-top">
-          <div class="card-body">
-            <h5 class="card-title">Believe In Your Mexico</h5>
-            <p class="location">🌍 Paris, France</p>
-            <div class="price-book">
-              <p class="mb-0"><strong>$4500</strong></p>
-              <a href="{% url 'bus_list' %}" class="btn btn-dark btn-sm btn-animate">Book Now</a>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="custom-card">
-        <div class="card">
-          <div class="position-absolute top-0 start-0 bg-light p-1 px-2 small">3 Day 2 Night</div>
-          <img src="{% static 'images/Travel3.jpg' %}" alt="Bahamas" class="card-img-top">
-          <div class="card-body">
-            <h5 class="card-title">Proof That Bahamas Beauty</h5>
-            <p class="location">🌍 Rome, Italy</p>
-            <div class="price-book">
-              <p class="mb-0"><strong>$4500</strong></p>
-              <a href="{% url 'bus_list' %}" class="btn btn-dark btn-sm btn-animate">Book Now</a>
-            </div>
-          </div>
-        </div>
-      </div>
+
       <div class="custom-card">
         <div class="card">
           <div class="position-absolute top-0 start-0 bg-light p-1 px-2 small">3 Day 2 Night</div>
@@ -130,6 +108,35 @@
         </div>
       </div>
 
+      <div class="custom-card">
+        <div class="card">
+          <div class="position-absolute top-0 start-0 bg-light p-1 px-2 small">3 Day 2 Night</div>
+          <img src="{% static 'images/Travel3.jpg' %}" alt="Bahamas" class="card-img-top">
+          <div class="card-body">
+            <h5 class="card-title">Proof That Bahamas Beauty</h5>
+            <p class="location">🌍 Rome, Italy</p>
+            <div class="price-book">
+              <p class="mb-0"><strong>$4500</strong></p>
+              <a href="{% url 'bus_list' %}" class="btn btn-dark btn-sm btn-animate">Book Now</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="custom-card">
+        <div class="card">
+          <div class="position-absolute top-0 start-0 bg-light p-1 px-2 small">3 Day 2 Night</div>
+          <img src="{% static 'images/Travel3.jpg' %}" alt="Mexico" class="card-img-top">
+          <div class="card-body">
+            <h5 class="card-title">Believe In Your Mexico</h5>
+            <p class="location">🌍 Paris, France</p>
+            <div class="price-book">
+              <p class="mb-0"><strong>$4500</strong></p>
+              <a href="{% url 'bus_list' %}" class="btn btn-dark btn-sm btn-animate">Book Now</a>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
