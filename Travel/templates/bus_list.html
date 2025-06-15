@@ -1,0 +1,98 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Search Buses</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f8fafc;
+      padding: 40px;
+    }
+    .container {
+      max-width: 900px;
+      margin: auto;
+    }
+    .search-form {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .search-form input, .search-form button {
+      padding: 10px;
+      margin: 20px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+    .search-form button {
+      background-color: #007BFF;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .bus-card {
+      background-color: #fff;
+      border-radius: 16px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      padding: 20px;
+      gap: 20px;
+    }
+    .bus-card img {
+      width: 150px;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 12px;
+    }
+    .bus-details {
+      flex: 1;
+      text-align: left;
+    }
+    .bus-details h3 {
+      margin: 0 0 8px 0;
+    }
+    .bus-card a {
+      background-color: #007BFF;
+      color: white;
+      padding: 10px 15px;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: bold;
+    }
+    .no-result {
+      text-align: center;
+      font-size: 18px;
+      color: #999;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 style="text-align: center;">Search Buses</h1>
+
+    <form class="search-form" method="get">
+      <input type="text" name="source" placeholder="From" value="{{ request.GET.source }}">
+      <input type="text" name="destination" placeholder="To" value="{{ request.GET.destination }}">
+      <button type="submit">Search</button>
+    </form>
+
+    {% if buses %}
+      {% for bus in buses %}
+        <div class="bus-card">
+          <img src="{% static 'images/bus.jpg' %}" alt="Bus Image">
+          <div class="bus-details">
+            <h3>{{ bus.operator }}</h3>
+            <p><strong>From:</strong> {{ bus.source }} → <strong>To:</strong> {{ bus.destination }}</p>
+            <p><strong>Departure:</strong> {{ bus.departure_time }} | <strong>Arrival:</strong> {{ bus.arrival_time }}</p>
+            <p><strong>Price:</strong> ₹{{ bus.price }}</p>
+          </div>
+          <a href="{% url 'view_seats' bus.id %}">View Seats</a>
+        </div>
+      {% endfor %}
+    {% else %}
+      <p class="no-result">No buses found for the selected route.</p>
+    {% endif %}
+  </div>
+</body>
+</html>

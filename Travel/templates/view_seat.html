@@ -1,0 +1,92 @@
+<!-- templates/view_seat.html -->
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Select Your Seats</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f2f4f8;
+            padding: 20px;
+            text-align: center;
+        }
+        h2 {
+            margin-bottom: 20px;
+        }
+        .bus-info {
+            margin-bottom: 30px;
+        }
+        .seat-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 80px);
+            gap: 12px;
+            justify-content: center;
+        }
+        .seat {
+            background: #4caf50;
+            color: white;
+            padding: 15px 0;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .seat input {
+            display: none;
+        }
+        .seat label {
+            display: block;
+            cursor: pointer;
+        }
+        .seat input:checked + span {
+            background: #007bff;
+        }
+        .booked span {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        .aisle {
+            visibility: hidden;
+        }
+        button {
+            margin-top: 30px;
+            padding: 12px 25px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h2>Select Your Seats</h2>
+    <div class="bus-info">
+        <p><strong>Bus:</strong> {{ bus.operator }}</p>
+        <p><strong>From:</strong> {{ bus.source }} → <strong>To:</strong> {{ bus.destination }}</p>
+        <p><strong>Departure:</strong> {{ bus.departure_time }} | <strong>Price per seat:</strong> ₹{{ bus.price }}</p>
+    </div>
+
+    <form method="post">
+        {% csrf_token %}
+        <div class="seat-grid">
+            {% for row in seat_rows %}
+                {% for seat in row %}
+                    {% if seat == 'aisle' %}
+                        <div class="aisle">---</div>
+                    {% else %}
+                        <div class="seat {% if seat.is_booked %}booked{% endif %}">
+                            <label>
+                                <input type="checkbox" name="seats" value="{{ seat.id }}" {% if seat.is_booked %}disabled{% endif %}>
+                                <span>{{ seat.seat_number }}</span>
+                            </label>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            {% endfor %}
+        </div>
+        <button type="submit">Proceed to Booking Summary</button>
+    </form>
+</body>
+</html>
