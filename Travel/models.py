@@ -41,3 +41,16 @@ class TravelPackage(models.Model):
 
     def __str__(self):
         return self.title
+    
+
+
+class Tour(models.Model):
+    name = models.CharField(max_length=100)
+    location = models.CharField(max_length=100)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    duration = models.CharField(max_length=50)
+    image = models.ImageField(upload_to='tour_images/')
+    is_most_visited = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.name
