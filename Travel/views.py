@@ -5,26 +5,40 @@ from django.contrib.auth import authenticate, login
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Bus, Seat,Booking,TravelPackage
 from .models import Tour
+from Tourism import settings
+from django.core.mail import send_mail
+from .models import CustomUser
+
+
 def home(request):
     return render(request, 'home.html')
 def about(request):
     return render(request,'about.html')
 def contact(request):
     return render(request,'Contacts.html')
+from django.shortcuts import render, redirect
+from .models import CustomUser, PasswordResetRequest
+from django.contrib.auth.hashers import make_password, check_password
+
 def login_view(request):
     error = None
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
 
-        user = authenticate(request, username=username, password=password)
-        if user is not None:
-            login(request, user)
-            return redirect('home')  # or any success page
-        else:
+        try:
+            user = CustomUser.objects.get(username=username)
+            if check_password(password, user.password):
+                # You can implement session login manually here if needed
+                request.session['user_id'] = user.id
+                return redirect('home')
+            else:
+                error = "Invalid username or password"
+        except CustomUser.DoesNotExist:
             error = "Invalid username or password"
 
     return render(request, 'login.html', {'error': error})
+
 
 def register_view(request):
     error = None
@@ -36,26 +50,58 @@ def register_view(request):
 
         if password1 != password2:
             error = "Passwords do not match"
-        elif User.objects.filter(username=username).exists():
+        elif CustomUser.objects.filter(username=username).exists():
             error = "Username already exists"
-        elif User.objects.filter(email=email).exists():
+        elif CustomUser.objects.filter(email=email).exists():
             error = "Email already in use"
         else:
-            user = User.objects.create_user(username=username, email=email, password=password1)
-            return redirect('login')
+            hashed_password = make_password(password1)
+            CustomUser.objects.create(username=username, email=email, password=hashed_password)
+            return redirect('login_view')
 
     return render(request, 'register.html', {'error': error})
 
+
+
 def forgot_password(request):
+    message = error = ''
     if request.method == 'POST':
         email = request.POST.get('email')
-        # Check if email exists, then send reset link
-        # For now, just show a dummy message
-        if email:
-            return render(request, 'forgot_password.html', {'message': 'Password reset link sent to your email.'})
+        user = CustomUser.objects.filter(email=email).first()
+        if user:
+            reset_link = f"http://127.0.0.1:8000/reset-password/{user.id}/"
+            send_mail(
+                'Password Reset Request',
+                f'Click the link to reset your password: {reset_link}',
+                'your_email@gmail.com',  # set this in settings.py
+                [email],
+                fail_silently=False,
+            )
+            message = 'Password reset link sent to your email.'
         else:
-            return render(request, 'forgot_password.html', {'error': 'Email not found.'})
-    return render(request, 'forgot_password.html')
+            error = 'Email not found.'
+    return render(request, 'forgot_password.html', {'message': message, 'error': error})
+
+
+def reset_password(request, user_id):
+    error = success = ''
+    if request.method == 'POST':
+        password1 = request.POST.get('password1')
+        password2 = request.POST.get('password2')
+        if password1 != password2:
+            error = 'Passwords do not match.'
+        else:
+            try:
+                user = CustomUser.objects.get(id=user_id)
+                user.password = password1  # Optional: hash before saving
+                user.save()
+                success = 'Password reset successful.'
+                return redirect('login_view')
+            except CustomUser.DoesNotExist:
+                error = 'Invalid link.'
+    return render(request, 'reset_password.html', {'error': error, 'success': success})
+
+
 def tour(request):
     packages = TravelPackage.objects.all()
     return render(request, 'TourPackages.html',{'packages': packages})
