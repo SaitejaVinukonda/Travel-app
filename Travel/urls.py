@@ -9,6 +9,8 @@ urlpatterns = [
     path('register/',views.register_view,name='register_view'),
     path('forgot_password/', views.forgot_password, name='forgot_password'),
     path('tour/',views.tour,name='tour'),
+    path('available-tours/', views.available_tours, name='available_tours'),
+
 
     path('bus_list/', views.bus_list, name='bus_list'),
     path('seats/<int:bus_id>/', views.view_seats, name='view_seats'),

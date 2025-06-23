@@ -4,6 +4,7 @@ from django.http import HttpResponse
 from django.contrib.auth import authenticate, login
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Bus, Seat,Booking,TravelPackage
+from .models import Tour
 def home(request):
     return render(request, 'home.html')
 def about(request):
@@ -133,3 +134,20 @@ def payment(request, bus_id):
         'message': "Booking Successful!",
         'booked_seats': [seat.seat_number for seat in seats_to_book],
     })
+
+
+
+
+
+def available_tours(request):
+    query = request.GET.get('q', '')
+    context = {'query': query}
+
+    if query:
+        tours = Tour.objects.filter(name__icontains=query) | Tour.objects.filter(location__icontains=query)
+        context['tours'] = tours
+    else:
+        most_visited = Tour.objects.filter(is_most_visited=True)[:6]
+        context['most_visited'] = most_visited
+
+    return render(request, 'TourPackages.html', context)
