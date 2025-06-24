@@ -465,6 +465,75 @@
 
     <!-- Script -->
     {% include './utils/script.html' %}
+    <img src="static/images/bot.jpg" id="chatbot-icon" style="
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 1000;
+    animation: float 3s ease-in-out infinite;
+">
+
+<div id="chatbox" style="
+    display: none;
+    position: fixed;
+    bottom: 100px;
+    right: 20px;
+    width: 300px;
+    height: 400px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.3);
+    z-index: 1000;
+    padding: 10px;
+    overflow-y: auto;
+">
+    <div id="chat-log" style="height: 320px; overflow-y: scroll; font-size: 14px;"></div>
+    <input type="text" id="user-input" placeholder="Ask me..." style="width: 70%;">
+    <button onclick="sendBotMessage()">Send</button>
+</div>
+
+<!-- 🧠 Chatbot Script -->
+<script>
+    const botIcon = document.getElementById("chatbot-icon");
+    const chatBox = document.getElementById("chatbox");
+
+    botIcon.onclick = () => {
+        chatBox.style.display = (chatBox.style.display === "none") ? "block" : "none";
+    };
+
+    async function sendBotMessage() {
+        const input = document.getElementById("user-input");
+        const message = input.value;
+        input.value = "";
+
+        const chatLog = document.getElementById("chat-log");
+        chatLog.innerHTML += `<p><strong>You:</strong> ${message}</p>`;
+
+        const res = await fetch("/chat-bot/", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({message})
+        });
+
+        const data = await res.json();
+        chatLog.innerHTML += `<p><strong>Bot:</strong> ${data.reply}</p>`;
+        chatLog.scrollTop = chatLog.scrollHeight;
+    }
+</script>
+
+<!-- ✨ Floating Animation -->
+<style>
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+</style>
+
+
 
   </body>
 </html>

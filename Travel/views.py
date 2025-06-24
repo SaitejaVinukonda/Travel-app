@@ -9,8 +9,55 @@ from Tourism import settings
 from django.core.mail import send_mail
 from .models import CustomUser
 from django.contrib import messages
+import os
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from dotenv import load_dotenv
+from google.cloud import dialogflow_v2 as dialogflow
+import uuid
+import json
+
+# Load environment variables from .env
+load_dotenv()
+
+# Set the path to the service account key
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
+
+# Replace with your Dialogflow project ID
+PROJECT_ID = 'travelassistant-9epl'  
 
 
+@csrf_exempt
+def chat_with_bot(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            user_message = data.get('message', '')
+
+            if not user_message:
+                return JsonResponse({'error': 'No message provided'}, status=400)
+
+            # Generate a unique session ID per user (or use Django session ID)
+            SESSION_ID = str(uuid.uuid4())
+
+            session_client = dialogflow.SessionsClient()
+            session = session_client.session_path(PROJECT_ID, SESSION_ID)
+
+            text_input = dialogflow.TextInput(text=user_message, language_code="en")
+            query_input = dialogflow.QueryInput(text=text_input)
+
+            response = session_client.detect_intent(
+                request={"session": session, "query_input": query_input}
+            )
+
+            bot_reply = response.query_result.fulfillment_text
+
+            return JsonResponse({"reply": bot_reply})
+        
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
+    else:
+        return JsonResponse({'error': 'Invalid request method'}, status=405)
 def home(request):
     return render(request, 'home.html')
 def about(request):
