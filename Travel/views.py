@@ -8,10 +8,6 @@ from .models import Tour
 from Tourism import settings
 from django.core.mail import send_mail
 from .models import CustomUser
-<<<<<<< HEAD
-from django.db.models import Q
-=======
->>>>>>> 84b39cf230a5dbc10901710d71d106eb2330ff79
 
 
 def home(request):
