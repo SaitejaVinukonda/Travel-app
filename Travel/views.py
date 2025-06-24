@@ -8,6 +8,7 @@ from .models import Tour
 from Tourism import settings
 from django.core.mail import send_mail
 from .models import CustomUser
+from django.db.models import Q
 
 
 def home(request):
@@ -184,7 +185,6 @@ def payment(request, bus_id):
 
 
 
-
 def available_tours(request):
     query = request.GET.get('q', '')
     context = {'query': query}
@@ -193,7 +193,26 @@ def available_tours(request):
         tours = Tour.objects.filter(name__icontains=query) | Tour.objects.filter(location__icontains=query)
         context['tours'] = tours
     else:
-        most_visited = Tour.objects.filter(is_most_visited=True)[:6]
+        most_visited = Tour.objects.filter(most_visited=True)[:6]   
         context['most_visited'] = most_visited
 
     return render(request, 'TourPackages.html', context)
+
+def tour_list(request):
+    query = request.GET.get('q')  # from the search bar
+    if query:
+        tours = Tour.objects.filter(
+            Q(name__icontains=query) | Q(location__icontains=query)
+        )
+    else:
+        tours = None
+
+    # Show top 6 or all tours as most visited — you can customize logic
+    most_visited = Tour.objects.all()[:6]
+
+    return render(request, 'tour_list.html', {
+        'query': query,
+        'tours': tours,
+        'most_visited': most_visited,
+    })
+

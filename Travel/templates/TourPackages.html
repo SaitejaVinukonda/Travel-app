@@ -3,10 +3,12 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Available Tours</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+
   <style>
     body {
       background: linear-gradient(135deg, #f3f4f7, #dbe9f4, #c6d4e1);
@@ -14,8 +16,21 @@
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
 
+    .top-header {
+      background-color: #17a2b8;
+    }
+
+    .top-header .fs-5 {
+      font-weight: 600;
+    }
+
+    .top-header a {
+      color: white;
+      margin-left: 15px;
+    }
+
     .hero-section {
-      background-image: url('{% static "images/banner.jpg" %}');
+      background-image: url('{% static "images/7wonders.jpg" %}');
       background-size: cover;
       background-position: center;
       height: 574px;
@@ -44,10 +59,6 @@
       padding: 20px 0;
       font-size: 2.5rem;
       font-weight: 700;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      letter-spacing: 1px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      margin: 0;
     }
 
     .card-wrapper {
@@ -59,17 +70,13 @@
       margin: 0 auto;
     }
 
-    .custom-card {
-      width: 100%;
-    }
-
     .card {
       border: none;
       border-radius: 15px;
       overflow: hidden;
       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
       background-color: #ffffff;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 
     .card:hover {
@@ -124,23 +131,26 @@
 
     .overlay-text {
       background-color: rgba(0, 0, 0, 0.6);
-      /* Black transparent background */
       padding: 20px 40px;
       border-radius: 12px;
       text-align: center;
       max-width: 80%;
     }
-
-    .hero-section {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-    }
   </style>
 </head>
 
 <body>
+  <!-- Header (copied from About Us) -->
+  <div class="top-header d-flex justify-content-between align-items-center text-white px-4 py-4">
+    <div class="fs-5">TRA-WELL Tourism</div>
+    <div>
+      <a href="#"><i class="fab fa-instagram"></i></a>
+      <a href="#"><i class="fab fa-facebook-f"></i></a>
+      <a href="#"><i class="fab fa-x-twitter"></i></a>
+    </div>
+  </div>
+
+  <!-- Hero Section -->
   <div class="hero-section">
     <div class="overlay-text">
       <h1>Where Will Your Journey Take You?</h1>
@@ -148,7 +158,7 @@
     </div>
   </div>
 
-
+  <!-- Search Bar -->
   <div class="container d-flex justify-content-center">
     <form class="d-flex my-4 w-50" method="GET" action="">
       <input class="form-control me-2 custom-search" type="search" name="q" placeholder="Search Tours"
@@ -157,61 +167,60 @@
     </form>
   </div>
 
+  <!-- Search Results or Most Visited -->
   {% if query %}
-  <div class="section-title">Search Results for "{{ query }}"</div>
-  <div class="card-wrapper">
-    {% if tours %}
-    {% for tour in tours %}
-    <div class="custom-card">
-      <div class="card">
-        <div class="position-absolute top-0 start-0 bg-light p-1 px-2 small">{{ tour.duration }}</div>
-        <img src="{{ tour.image.url }}" alt="{{ tour.name }}" class="card-img-top">
-        <div class="card-body">
-          <h5 class="card-title">{{ tour.name }}</h5>
-          <p class="location">🌍 {{ tour.location }}</p>
-          <div class="price-book">
-            <p class="mb-0"><strong>${{ tour.price }}</strong></p>
-            <a href="{% url 'bus_list' %}" class="btn btn-dark btn-sm btn-animate">Book Now</a>
+    <div class="section-title">Search Results for "{{ query }}"</div>
+    <div class="card-wrapper">
+      {% if tours %}
+        {% for tour in tours %}
+          <div class="card">
+            <div class="position-absolute top-0 start-0 bg-light p-1 px-2 small">{{ tour.duration }}</div>
+            <img src="{{ tour.image.url }}" alt="{{ tour.name }}">
+            <div class="card-body">
+              <h5 class="card-title">{{ tour.name }}</h5>
+              <p class="location">🌍 {{ tour.location }}</p>
+              <div class="price-book">
+                <p class="mb-0"><strong>₹{{ tour.price }}</strong></p>
+                <a href="{% url 'bus_list' %}" class="btn btn-dark btn-sm btn-animate">Book Now</a>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
+        {% endfor %}
+      {% else %}
+        <p class="text-center fs-5">No tours found for your search.</p>
+      {% endif %}
     </div>
-    {% endfor %}
-    {% else %}
-    <p class="text-center fs-5">No tours found for your search.</p>
-    {% endif %}
-  </div>
   {% else %}
-  <div class="section-title">Most Visited Places</div>
-  <div class="card-wrapper">
-    {% for tour in most_visited %}
-    <div class="custom-card">
-      <div class="card">
-        <div class="position-absolute top-0 start-0 bg-light p-1 px-2 small">{{ tour.duration }}</div>
-        <img src="{{ tour.image.url }}" alt="{{ tour.name }}" class="card-img-top">
-        <div class="card-body">
-          <h5 class="card-title">{{ tour.name }}</h5>
-          <p class="location">🌍 {{ tour.location }}</p>
-          <div class="price-book">
-            <p class="mb-0"><strong>${{ tour.price }}</strong></p>
-            <a href="{% url 'bus_list' %}" class="btn btn-dark btn-sm btn-animate">Book Now</a>
+    <div class="section-title">Most Visited Places</div>
+    <div class="card-wrapper">
+      {% for tour in most_visited %}
+        <div class="card">
+          <div class="position-absolute top-0 start-0 bg-light p-1 px-2 small">{{ tour.duration }}</div>
+          <img src="{{ tour.image.url }}" alt="{{ tour.name }}">
+          <div class="card-body">
+            <h5 class="card-title">{{ tour.name }}</h5>
+            <p class="location">🌍 {{ tour.location }}</p>
+            <div class="price-book">
+              <p class="mb-0"><strong>₹{{ tour.price }}</strong></p>
+              <a href="{% url 'bus_list' %}" class="btn btn-dark btn-sm btn-animate">Book Now</a>
+            </div>
           </div>
         </div>
-      </div>
+      {% endfor %}
     </div>
-    {% endfor %}
-  </div>
   {% endif %}
 
+  <!-- Footer -->
   <footer class="footer-main text-white pt-4">
     <div class="container text-center">
       <p class="mb-1 fw-semibold fs-5">TRA-WELL Tourism</p>
       <p class="mb-0">Designed with ❤️ by the TRA-WELL Team</p>
     </div>
-    <div class="footer-bottom bg-dark text-center py-2 mt-3">
+    <div class="footer-bottom text-center py-2 mt-3">
       &copy; 2025 TRA-WELL Tourism. All rights reserved.
     </div>
   </footer>
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
