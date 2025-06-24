@@ -8,6 +8,7 @@ from .models import Tour
 from Tourism import settings
 from django.core.mail import send_mail
 from .models import CustomUser
+from django.contrib import messages
 
 
 def home(request):
@@ -205,13 +206,18 @@ def tour_list(request):
         )
     else:
         tours = None
-
-    # Show top 6 or all tours as most visited — you can customize logic
     most_visited = Tour.objects.all()[:6]
-
     return render(request, 'tour_list.html', {
         'query': query,
         'tours': tours,
         'most_visited': most_visited,
     })
-
+def submit_feedback(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        feedback = request.POST.get('feedback')
+        rating = request.POST.get('rating')
+        messages.success(request, 'Feedback submitted successfully!')
+        return redirect('contact')
+    return redirect('contact')

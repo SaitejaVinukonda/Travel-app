@@ -18,5 +18,7 @@ urlpatterns = [
     path('booking-summary/', views.booking_summary, name='booking_summary'),
     path('payment/<int:bus_id>/', views.payment, name='payment'),
     path('tours/', views.tour_list, name='tour_list'),
+    path('submit-feedback/', views.submit_feedback, name='submit_feedback')
+    
 ]
 
