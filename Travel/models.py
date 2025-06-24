@@ -54,3 +54,27 @@ class Tour(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class CustomUser(models.Model):
+    username = models.CharField(max_length=150, unique=True)
+    email = models.EmailField(unique=True)
+    password = models.CharField(max_length=128)  
+
+    def _str_(self):
+        return self.username
+
+
+class PasswordResetRequest(models.Model):
+    email = models.EmailField()
+    requested_at = models.DateTimeField(auto_now_add=True)
+    is_resolved = models.BooleanField(default=False)
+
+    def _str_(self):
+        return f"Reset requested for {self.email} on {self.requested_at}"
+
+
+
+
+
+
