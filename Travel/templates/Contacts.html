@@ -23,8 +23,6 @@
       flex-direction:column;
       align-items:stretch;
     }
-
-    /* header now scrolls with the document */
     header{
       width:100%;
     }
@@ -104,8 +102,15 @@
     @media(max-width:768px){
       .cards-container{flex-direction:column;align-items:center}
     }
+    .footer-main {
+            background-color: #17a2b8; 
+        }
 
-    footer{background:#212529;color:#fff}
+        .footer-bottom {
+  background-color: #000;
+  color: #f1f1f1;
+}
+
   </style>
 </head>
 
@@ -123,7 +128,6 @@
 </header>
 
 <main>
-  <!-- cards -->
   <div class="cards-container">
     <div class="custom-card">
       <div class="card">
@@ -154,7 +158,6 @@
     </div>
   </div>
 
-  <!-- feedback -->
   <div class="feedback-wrapper">
     <h2>We Value Your Feedback!</h2>
     <form action="/submit-feedback" method="post">
@@ -185,16 +188,14 @@
     </form>
   </div>
 </main>
-
-<footer class="text-white pt-4">
+<footer class="footer-main text-white pt-4">
   <div class="container text-center">
     <p class="mb-1 fw-semibold fs-5">TRA-WELL Tourism</p>
     <p class="mb-0">Designed with ❤️ by the TRA-WELL Team</p>
   </div>
-  <div class="footer-bottom bg-dark text-center py-2 mt-3">
+  <div class="footer-bottom text-center py-2 mt-3">
     &copy; 2025 TRA-WELL Tourism. All rights reserved.
   </div>
 </footer>
-
 </body>
 </html>
