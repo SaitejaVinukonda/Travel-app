@@ -1,7 +1,6 @@
 from django.contrib import admin
 from .models import Bus, Seat, Tour
 
-# Seat admin (from earlier)
 class SeatAdmin(admin.ModelAdmin):
     list_display = ['seat_number', 'bus', 'is_booked']
     list_filter = ['bus', 'is_booked']
@@ -12,7 +11,6 @@ class SeatAdmin(admin.ModelAdmin):
         self.message_user(request, f"{updated} seats marked as not booked.")
     reset_seats.short_description = "Reset selected seats (mark as not booked)"
 
-# Bus admin with reset seats action
 class BusAdmin(admin.ModelAdmin):
     list_display = ['operator', 'source', 'destination', 'departure_time']
     actions = ['reset_all_seats_for_bus']
@@ -25,7 +23,6 @@ class BusAdmin(admin.ModelAdmin):
         self.message_user(request, f"{total} seats reset for selected bus(es).")
     reset_all_seats_for_bus.short_description = "Reset all seats for selected buses"
 
-# Register all
 admin.site.register(Bus, BusAdmin)
 admin.site.register(Tour)
 admin.site.register(Seat, SeatAdmin)
