@@ -227,24 +227,22 @@ def payment(request, bus_id):
         'booked_seats': [seat.seat_number for seat in seats_to_book],
     })
 
-
-
-
 def available_tours(request):
     query = request.GET.get('q', '')
     context = {'query': query}
 
     if query:
-        tours = Tour.objects.filter(name__icontains=query) | Tour.objects.filter(location__icontains=query)
-        context['tours'] = tours
+        tours = Tour.objects.filter(Q(name__icontains=query) | Q(location__icontains=query))
+        context['tours'] = tours  
     else:
-        most_visited = Tour.objects.filter(most_visited=True)[:6]   
-        context['most_visited'] = most_visited
+        most_visited = Tour.objects.filter(most_visited=True)[:6]
+        context['most_visited'] = most_visited  
 
     return render(request, 'TourPackages.html', context)
 
+
 def tour_list(request):
-    query = request.GET.get('q')  # from the search bar
+    query = request.GET.get('q')  
     if query:
         tours = Tour.objects.filter(
             Q(name__icontains=query) | Q(location__icontains=query)
