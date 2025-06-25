@@ -60,6 +60,7 @@ class CustomUser(models.Model):
     username = models.CharField(max_length=150, unique=True)
     email = models.EmailField(unique=True)
     password = models.CharField(max_length=128)  
+    otp = models.IntegerField(null=True, blank=True)
 
     def _str_(self):
         return self.username
