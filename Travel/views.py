@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from django.shortcuts import render,redirect
-from django.http import HttpResponse
+from django.http import HttpResponse,HttpResponseBadRequest
 from django.contrib.auth import authenticate, login
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Tour,Bus, Seat,Booking,TravelPackage
@@ -9,6 +9,7 @@ from django.core.mail import send_mail
 from .models import CustomUser
 from django.contrib import messages
 from django.db import transaction
+from django.db.models import Q
 #from django.http import JsonResponse
 #from django.views.decorators.csrf import csrf_exempt
 #from google.cloud import dialogflow_v2 as dialogflow
@@ -293,12 +294,17 @@ def available_tours(request):
     context = {'query': query}
 
     if query:
-        tours = Tour.objects.filter(name__icontains=query) | Tour.objects.filter(location__icontains=query)
-        context['tours'] = tours
+        tours = Tour.objects.filter(Q(name__icontains=query) | Q(location__icontains=query))
+        context['tours'] = tours  
     else:
         most_visited = Tour.objects.filter(most_visited=True)[:6]   
         context['most_visited'] = most_visited
+        most_visited = Tour.objects.filter(most_visited=True)[:6]
+        context['most_visited'] = most_visited  
+
+
     return render(request, 'TourPackages.html', context)
+
 
 def tour_list(request):
     query = request.GET.get('q')  
