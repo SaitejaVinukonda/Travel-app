@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from django.shortcuts import render,redirect
-from django.http import HttpResponse
+from django.http import HttpResponse,HttpResponseBadRequest
 from django.contrib.auth import authenticate, login
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Bus, Seat,Booking,TravelPackage
@@ -9,6 +9,8 @@ from Tourism import settings
 from django.core.mail import send_mail
 from .models import CustomUser
 from django.contrib import messages
+from django.db import transaction
+from django.db.models import Q
 #from django.http import JsonResponse
 #from django.views.decorators.csrf import csrf_exempt
 #from google.cloud import dialogflow_v2 as dialogflow
@@ -164,11 +166,12 @@ def bus_list(request):
     return render(request, 'bus_list.html', {'buses': buses})
 
 
+
 def view_seats(request, bus_id):
     bus = get_object_or_404(Bus, id=bus_id)
     seats = Seat.objects.filter(bus=bus).order_by('seat_number')
 
-    # Arrange seats in a 4-column grid with aisle
+    # Arrange seats in a 4-column grid with an aisle
     seat_map = []
     row = []
     for i, seat in enumerate(seats):
@@ -176,14 +179,27 @@ def view_seats(request, bus_id):
         if (i + 1) % 4 == 0:
             seat_map.append(row[:2] + ['aisle'] + row[2:])
             row = []
+    if row:  # Add remaining seats if any
+        seat_map.append(row)
+
+    # ✅ Check if all seats are booked
+    all_seats_booked = all(seat.is_booked for seat in seats)
 
     if request.method == 'POST':
         selected_seat_ids = request.POST.getlist('seats')
         selected_seats = Seat.objects.filter(id__in=selected_seat_ids, is_booked=False)
+
+        if not selected_seats:
+            return render(request, 'view_seat.html', {
+                'bus': bus,
+                'seat_rows': seat_map,
+                'error': "No valid seats selected.",
+                'all_seats_booked': all_seats_booked
+            })
+
         seat_numbers = [seat.seat_number for seat in selected_seats]
         total_price = bus.price * selected_seats.count()
 
-        # Save selected seat ids in session
         request.session['selected_seat_ids'] = selected_seat_ids
         request.session['selected_seat_numbers'] = seat_numbers
         request.session['bus_id'] = bus.id
@@ -191,7 +207,11 @@ def view_seats(request, bus_id):
 
         return redirect('booking_summary')
 
-    return render(request, 'view_seat.html', {'bus': bus, 'seat_rows': seat_map})
+    return render(request, 'view_seat.html', {
+        'bus': bus,
+        'seat_rows': seat_map,
+        'all_seats_booked': all_seats_booked
+    })
 
 
 def booking_summary(request):
@@ -208,23 +228,86 @@ def booking_summary(request):
         'total_price': total_price
     })
 
-def payment(request, bus_id):
-    seat_ids = request.session.get('selected_seat_ids', [])
-    seats_to_book = Seat.objects.filter(id__in=seat_ids, is_booked=False)
 
-    # Mark seats as booked
+def payment_form(request):
+    bus_id = request.session.get('bus_id')
+    seat_ids = request.session.get('selected_seat_ids', [])
+    
+    if not bus_id or not seat_ids:
+        return HttpResponseBadRequest("Missing bus or seat info.")
+
+    bus = get_object_or_404(Bus, id=bus_id)
+    seats = Seat.objects.filter(id__in=seat_ids)
+    total_price = float(bus.price) * len(seats)
+
+    return render(request, 'payment_form.html', {
+        'bus_id': bus_id,
+        'total_price': total_price
+    })
+
+
+@transaction.atomic
+def payment(request, bus_id):
+    
+    # ✅ Step 2: Validate session seat data
+    seat_ids = request.session.get('selected_seat_ids', [])
+    if not seat_ids:
+        return HttpResponseBadRequest("No seats selected.")
+
+    seats_to_book = Seat.objects.select_for_update().filter(id__in=seat_ids, is_booked=False)
+    if not seats_to_book.exists():
+        return HttpResponseBadRequest("Selected seats are already booked or invalid.")
+
+    # ✅ Step 3: Get Bus instance
+    bus = get_object_or_404(Bus, id=bus_id)
+
+    # ✅ Step 4: Get current logged-in user from session
+    user = None
+    user_id = request.session.get('user_id')
+    if user_id:
+        try:
+            user = CustomUser.objects.get(id=user_id)
+        except CustomUser.DoesNotExist:
+            return HttpResponseBadRequest("User not found. Please log in again.")
+
+    # ✅ Step 5: Create booking
+    booking = Booking.objects.create(bus=bus, user=user)
+    booking.seats.set(seats_to_book)
+
+    # ✅ Step 6: Mark seats as booked
     for seat in seats_to_book:
         seat.is_booked = True
         seat.save()
 
-    # Save booking in DB
-    bus = get_object_or_404(Bus, id=bus_id)
-    booking = Booking.objects.create(bus=bus)
-    booking.seats.set(seats_to_book)
+    seat_numbers = [seat.seat_number for seat in seats_to_book]
+    total_price = float(bus.price) * len(seat_numbers)
 
+    # ✅ Step 7: Send confirmation email
+    if user and user.email:
+        subject = '🚌 Your Bus Booking is Confirmed!'
+        message = (
+            f"Hello {user.username},\n\n"
+            f"Thank you for booking with us. Here are your ticket details:\n\n"
+            f"🚌 Bus: {bus.operator}\n"
+            f"📍 From: {bus.source} → To: {bus.destination}\n"
+            f"⏰ Departure: {bus.departure_time}\n"
+            f"💺 Seats: {', '.join(seat_numbers)}\n"
+            f"💰 Total: ₹{total_price}\n\n"
+            f"We wish you a safe and pleasant journey.\n\n"
+            f"Regards,\nBus Booking Team"
+        )
+
+        send_mail(
+            subject=subject,
+            message=message,
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[user.email],
+            fail_silently=False,
+        )
+
+    # ✅ Step 8: Show confirmation page
     return render(request, 'payment.html', {
-        'message': "Booking Successful!",
-        'booked_seats': [seat.seat_number for seat in seats_to_book],
+        'booked_seats': seat_numbers
     })
 
 def available_tours(request):
