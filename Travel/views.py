@@ -1,16 +1,20 @@
 from django.contrib.auth.models import User
 from django.shortcuts import render,redirect
-from django.http import HttpResponse
+from django.http import HttpResponse,HttpResponseBadRequest
 from django.contrib.auth import authenticate, login
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Bus, Seat,Booking,TravelPackage
-from .models import Tour
+from .models import Tour,Bus, Seat,Booking,TravelPackage
 from Tourism import settings
 from django.core.mail import send_mail
 from .models import CustomUser
 from django.contrib import messages
+<<<<<<< HEAD
 import random
 from .utils import sendOTPtOEmail
+=======
+from django.db import transaction
+from django.db.models import Q
+>>>>>>> 5cd93d92f968b22e99a670e521350bd803ac11d7
 #from django.http import JsonResponse
 #from django.views.decorators.csrf import csrf_exempt
 #from google.cloud import dialogflow_v2 as dialogflow
@@ -109,6 +113,7 @@ def register_view(request):
 
     return render(request, 'register.html', {'error': error})
 
+<<<<<<< HEAD
 
 def send_otp(request):
     if request.method == 'POST':
@@ -159,6 +164,8 @@ def verify_otp(request):
    
 #def enter_otp(request, email):
 #    return render(request, 'otp.html', {'email': email})
+=======
+>>>>>>> 5cd93d92f968b22e99a670e521350bd803ac11d7
 def forgot_password(request):
     message = error = ''
     if request.method == 'POST':
@@ -169,7 +176,7 @@ def forgot_password(request):
             send_mail(
                 'Password Reset Request',
                 f'Click the link to reset your password: {reset_link}',
-                'your_email@gmail.com',  # set this in settings.py
+                'your_email@gmail.com',  
                 [email],
                 fail_silently=False,
             )
@@ -189,7 +196,7 @@ def reset_password(request, user_id):
         else:
             try:
                 user = CustomUser.objects.get(id=user_id)
-                user.password = password1  # Optional: hash before saving
+                user.password = password1  
                 user.save()
                 success = 'Password reset successful.'
                 return redirect('login_view')
@@ -214,11 +221,16 @@ def bus_list(request):
     return render(request, 'bus_list.html', {'buses': buses})
 
 
+
 def view_seats(request, bus_id):
+
+    user_id = request.session.get('user_id')
+    if not user_id:
+        messages.error(request, "Please log in to book a seat.")
+        return redirect('login_view')
+
     bus = get_object_or_404(Bus, id=bus_id)
     seats = Seat.objects.filter(bus=bus).order_by('seat_number')
-
-    # Arrange seats in a 4-column grid with aisle
     seat_map = []
     row = []
     for i, seat in enumerate(seats):
@@ -226,14 +238,23 @@ def view_seats(request, bus_id):
         if (i + 1) % 4 == 0:
             seat_map.append(row[:2] + ['aisle'] + row[2:])
             row = []
-
+    if row:
+        seat_map.append(row)
+    all_seats_booked = all(seat.is_booked for seat in seats)
     if request.method == 'POST':
         selected_seat_ids = request.POST.getlist('seats')
         selected_seats = Seat.objects.filter(id__in=selected_seat_ids, is_booked=False)
+        if not selected_seats:
+            return render(request, 'view_seat.html', {
+                'bus': bus,
+                'seat_rows': seat_map,
+                'error': "No valid seats selected.",
+                'all_seats_booked': all_seats_booked
+            })
+
         seat_numbers = [seat.seat_number for seat in selected_seats]
         total_price = bus.price * selected_seats.count()
 
-        # Save selected seat ids in session
         request.session['selected_seat_ids'] = selected_seat_ids
         request.session['selected_seat_numbers'] = seat_numbers
         request.session['bus_id'] = bus.id
@@ -241,7 +262,11 @@ def view_seats(request, bus_id):
 
         return redirect('booking_summary')
 
-    return render(request, 'view_seat.html', {'bus': bus, 'seat_rows': seat_map})
+    return render(request, 'view_seat.html', {
+        'bus': bus,
+        'seat_rows': seat_map,
+        'all_seats_booked': all_seats_booked
+    })
 
 
 def booking_summary(request):
@@ -249,52 +274,98 @@ def booking_summary(request):
     seat_numbers = request.session.get('selected_seat_numbers', [])
     bus_id = request.session.get('bus_id')
     total_price = request.session.get('total_price', 0)
-
     bus = get_object_or_404(Bus, id=bus_id)
-
     return render(request, 'booking_summary.html', {
         'bus': bus,
         'selected_seats': ', '.join(seat_numbers),
         'total_price': total_price
     })
 
-def payment(request, bus_id):
+
+def payment_form(request):
+    bus_id = request.session.get('bus_id')
     seat_ids = request.session.get('selected_seat_ids', [])
-    seats_to_book = Seat.objects.filter(id__in=seat_ids, is_booked=False)
-
-    # Mark seats as booked
-    for seat in seats_to_book:
-        seat.is_booked = True
-        seat.save()
-
-    # Save booking in DB
+    
+    if not bus_id or not seat_ids:
+        return HttpResponseBadRequest("Missing bus or seat info.")
     bus = get_object_or_404(Bus, id=bus_id)
-    booking = Booking.objects.create(bus=bus)
-    booking.seats.set(seats_to_book)
+    seats = Seat.objects.filter(id__in=seat_ids)
+    total_price = float(bus.price) * len(seats)
 
-    return render(request, 'payment.html', {
-        'message': "Booking Successful!",
-        'booked_seats': [seat.seat_number for seat in seats_to_book],
+    return render(request, 'payment_form.html', {
+        'bus_id': bus_id,
+        'total_price': total_price
     })
 
 
+@transaction.atomic
+def payment(request, bus_id):
+    
+    seat_ids = request.session.get('selected_seat_ids', [])
+    if not seat_ids:
+        return HttpResponseBadRequest("No seats selected.")
 
+    seats_to_book = Seat.objects.select_for_update().filter(id__in=seat_ids, is_booked=False)
+    if not seats_to_book.exists():
+        return HttpResponseBadRequest("Selected seats are already booked or invalid.")
+    bus = get_object_or_404(Bus, id=bus_id)
+    user = None
+    user_id = request.session.get('user_id')
+    if user_id:
+        try:
+            user = CustomUser.objects.get(id=user_id)
+        except CustomUser.DoesNotExist:
+            return HttpResponseBadRequest("User not found. Please log in again.")
+    booking = Booking.objects.create(bus=bus, user=user)
+    booking.seats.set(seats_to_book)
+    for seat in seats_to_book:
+        seat.is_booked = True
+        seat.save()
+    seat_numbers = [seat.seat_number for seat in seats_to_book]
+    total_price = float(bus.price) * len(seat_numbers)
+    if user and user.email:
+        subject = '🚌 Your Bus Booking is Confirmed!'
+        message = (
+            f"Hello {user.username},\n\n"
+            f"Thank you for booking with us. Here are your ticket details:\n\n"
+            f"🚌 Bus: {bus.operator}\n"
+            f"📍 From: {bus.source} → To: {bus.destination}\n"
+            f"⏰ Departure: {bus.departure_time}\n"
+            f"💺 Seats: {', '.join(seat_numbers)}\n"
+            f"💰 Total: ₹{total_price}\n\n"
+            f"We wish you a safe and pleasant journey.\n\n"
+            f"Regards,\nBus Booking Team"
+        )
+        send_mail(
+            subject=subject,
+            message=message,
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[user.email],
+            fail_silently=False,
+        )
+    return render(request, 'payment.html', {
+        'booked_seats': seat_numbers
+    })
 
 def available_tours(request):
     query = request.GET.get('q', '')
     context = {'query': query}
 
     if query:
-        tours = Tour.objects.filter(name__icontains=query) | Tour.objects.filter(location__icontains=query)
-        context['tours'] = tours
+        tours = Tour.objects.filter(Q(name__icontains=query) | Q(location__icontains=query))
+        context['tours'] = tours  
     else:
         most_visited = Tour.objects.filter(most_visited=True)[:6]   
         context['most_visited'] = most_visited
+        most_visited = Tour.objects.filter(most_visited=True)[:6]
+        context['most_visited'] = most_visited  
+
 
     return render(request, 'TourPackages.html', context)
 
+
 def tour_list(request):
-    query = request.GET.get('q')  # from the search bar
+    query = request.GET.get('q')  
     if query:
         tours = Tour.objects.filter(
             Q(name__icontains=query) | Q(location__icontains=query)

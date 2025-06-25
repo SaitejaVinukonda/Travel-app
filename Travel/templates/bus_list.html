@@ -5,71 +5,109 @@
   <title>Search Buses</title>
   <style>
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #f8fafc;
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to bottom right, #dff6ff, #ffffff);
+      background-attachment: fixed;
       padding: 40px;
+      min-height: 100vh;
     }
+
     .container {
       max-width: 900px;
       margin: auto;
     }
+
+    h1 {
+      text-align: center;
+      color: #1f2937;
+      margin-bottom: 20px;
+    }
+
     .search-form {
       text-align: center;
       margin-bottom: 30px;
     }
+
     .search-form input, .search-form button {
-      padding: 10px;
-      margin: 20px;
+      padding: 12px 16px;
+      margin: 10px;
       border-radius: 8px;
       border: 1px solid #ccc;
+      font-size: 16px;
     }
+
     .search-form button {
       background-color: #007BFF;
       color: white;
       font-weight: bold;
       cursor: pointer;
+      border: none;
+      transition: background 0.3s ease;
     }
+
+    .search-form button:hover {
+      background-color: #0056b3;
+    }
+
     .bus-card {
-      background-color: #fff;
+      background-color: #ffffff;
       border-radius: 16px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      margin-bottom: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      margin-bottom: 25px;
       display: flex;
       align-items: center;
       padding: 20px;
       gap: 20px;
     }
+
     .bus-card img {
       width: 150px;
       height: 100px;
       object-fit: cover;
       border-radius: 12px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
     }
+
     .bus-details {
       flex: 1;
       text-align: left;
     }
+
     .bus-details h3 {
-      margin: 0 0 8px 0;
+      margin: 0 0 10px;
+      color: #111827;
     }
+
+    .bus-details p {
+      margin: 5px 0;
+      color: #374151;
+    }
+
     .bus-card a {
       background-color: #007BFF;
       color: white;
-      padding: 10px 15px;
+      padding: 10px 16px;
       text-decoration: none;
       border-radius: 8px;
-      font-weight: bold;
+      font-weight: 600;
+      transition: background 0.3s ease;
     }
+
+    .bus-card a:hover {
+      background-color: #0056b3;
+    }
+
     .no-result {
       text-align: center;
       font-size: 18px;
-      color: #999;
+      color: #9ca3af;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1 style="text-align: center;">Search Buses</h1>
+    <h1>Search Buses</h1>
 
     <form class="search-form" method="get">
       <input type="text" name="source" placeholder="From" value="{{ request.GET.source }}">

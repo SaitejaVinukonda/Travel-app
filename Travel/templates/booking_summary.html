@@ -1,4 +1,3 @@
-<!-- templates/booking_summary.html -->
 {% load static %}
 <!DOCTYPE html>
 <html>
@@ -7,39 +6,56 @@
     <style>
         body {
             font-family: 'Segoe UI', sans-serif;
-            background-color: #fdfdfd;
+            background: linear-gradient(to right, #e0f2fe, #f8fafc);
             padding: 40px;
             text-align: center;
         }
         .summary-box {
-            max-width: 600px;
+            max-width: 500px;
             margin: auto;
-            padding: 30px;
+            padding: 30px 20px;
             background-color: #ffffff;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
         .summary-box h2 {
             margin-bottom: 20px;
-            color: #333;
+            color: #1e3a8a;
+            font-size: 28px;
         }
         .summary-box p {
             font-size: 16px;
-            margin: 8px 0;
+            margin: 10px 0;
+            color: #333;
         }
-        .summary-box .highlight {
+        .highlight {
             font-weight: bold;
             color: #007bff;
         }
-        .summary-box button {
-            margin-top: 20px;
-            padding: 12px 25px;
+        button {
+            margin-top: 25px;
+            padding: 12px 30px;
             background: #28a745;
             color: white;
             border: none;
             border-radius: 10px;
             font-size: 16px;
             cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        button:hover {
+            background: #218838;
+        }
+
+        /* Mobile responsiveness */
+        @media (max-width: 600px) {
+            .summary-box {
+                margin: 20px;
+                padding: 25px 15px;
+            }
+            button {
+                width: 100%;
+            }
         }
     </style>
 </head>
@@ -52,7 +68,7 @@
         <p><strong>Selected Seats:</strong> <span class="highlight">{{ selected_seats }}</span></p>
         <p><strong>Total Amount:</strong> ₹<span class="highlight">{{ total_price }}</span></p>
 
-        <form method="post" action="{% url 'payment' bus.id %}">
+        <form method="post" action="{% url 'payment_form' %}">
             {% csrf_token %}
             <button type="submit">Confirm & Pay</button>
         </form>
