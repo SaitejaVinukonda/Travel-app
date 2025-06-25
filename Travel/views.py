@@ -8,13 +8,10 @@ from Tourism import settings
 from django.core.mail import send_mail
 from .models import CustomUser
 from django.contrib import messages
-<<<<<<< HEAD
 import random
 from .utils import sendOTPtOEmail
-=======
 from django.db import transaction
 from django.db.models import Q
->>>>>>> 5cd93d92f968b22e99a670e521350bd803ac11d7
 #from django.http import JsonResponse
 #from django.views.decorators.csrf import csrf_exempt
 #from google.cloud import dialogflow_v2 as dialogflow
@@ -113,8 +110,6 @@ def register_view(request):
 
     return render(request, 'register.html', {'error': error})
 
-<<<<<<< HEAD
-
 def send_otp(request):
     if request.method == 'POST':
         email = request.POST.get('email')
@@ -164,8 +159,6 @@ def verify_otp(request):
    
 #def enter_otp(request, email):
 #    return render(request, 'otp.html', {'email': email})
-=======
->>>>>>> 5cd93d92f968b22e99a670e521350bd803ac11d7
 def forgot_password(request):
     message = error = ''
     if request.method == 'POST':
