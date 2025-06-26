@@ -15,6 +15,8 @@ from django.db.models import Q
 from .models import Hotel, HotelRoom, HotelBooking
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import logout
+
 #from django.http import JsonResponse
 #from django.views.decorators.csrf import csrf_exempt
 #from google.cloud import dialogflow_v2 as dialogflow
@@ -200,11 +202,11 @@ def reset_password(request, user_id):
                 error = 'Invalid link.'
     return render(request, 'reset_password.html', {'error': error, 'success': success})
 
-
+@login_required
 def tour(request):
     packages = TravelPackage.objects.all()
     return render(request, 'TourPackages.html',{'packages': packages})
-
+@login_required
 def bus_list(request):
     source = request.GET.get('source')
     destination = request.GET.get('destination')
@@ -217,7 +219,7 @@ def bus_list(request):
     return render(request, 'bus_list.html', {'buses': buses})
 
 
-
+@login_required
 def view_seats(request, bus_id):
 
     user_id = request.session.get('user_id')
@@ -264,7 +266,7 @@ def view_seats(request, bus_id):
         'all_seats_booked': all_seats_booked
     })
 
-
+@login_required
 def booking_summary(request):
     seat_ids = request.session.get('selected_seat_ids', [])
     seat_numbers = request.session.get('selected_seat_numbers', [])
@@ -277,7 +279,7 @@ def booking_summary(request):
         'total_price': total_price
     })
 
-
+@login_required
 def payment_form(request):
     bus_id = request.session.get('bus_id')
     seat_ids = request.session.get('selected_seat_ids', [])
@@ -342,7 +344,7 @@ def payment(request, bus_id):
     return render(request, 'payment.html', {
         'booked_seats': seat_numbers
     })
-
+@login_required
 def available_tours(request):
     query = request.GET.get('q', '')
     context = {'query': query}
@@ -359,7 +361,7 @@ def available_tours(request):
 
     return render(request, 'TourPackages.html', context)
 
-
+@login_required
 def tour_list(request):
     query = request.GET.get('q')  
     if query:
@@ -383,6 +385,20 @@ def submit_feedback(request):
         messages.success(request, 'Feedback submitted successfully!')
         return redirect('contact')
     return redirect('contact')
+<<<<<<< HEAD
+
+def logout_view(request):
+    if request.method == 'POST':
+        logout(request)
+        return redirect('login_view')
+    return render(request, 'logout.html')
+=======
+def tour_details(request):
+    return render(request, 'tourdetailslist.html')
+def blogDetails(request):
+    return render(request, "blogDetails.html")
+    
+>>>>>>> 2e32ff27c474cf956e300f96caeeb9040ccabd33
 #def hotel_list(request):
 #    hotels = Hotel.objects.all()
 #    return render(request, 'hotel_list.html', {'hotels': hotels})

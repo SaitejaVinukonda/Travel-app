@@ -13,6 +13,8 @@ urlpatterns = [
     path('tour/',views.tour,name='tour'),
     path('tour/',views.available_tours,name='available_tours'),
     path('available-tours/', views.available_tours, name='available_tours'),
+    path('tour_details/',views.tour_details,name='tour_details'),
+    path ('blog-details', views.blogDetails, name = 'blogDetails'),
     path('reset-password/<int:user_id>/',views.reset_password,name='reset_password'),
     path('bus_list/', views.bus_list, name='bus_list'),
     path('seats/<int:bus_id>/', views.view_seats, name='view_seats'),
@@ -21,6 +23,8 @@ urlpatterns = [
     path('payment/<int:bus_id>/', views.payment, name='payment'),
     path('tours/', views.tour_list, name='tour_list'),
     path('submit-feedback/', views.submit_feedback, name='submit_feedback'),
+    path('logout/', views.logout_view, name='logout'),
+
     #path('hotels/', views.hotel_list, name='hotel_list'),
     #path('hotels/<int:hotel_id>/', views.hotel_detail, name='hotel_detail'),
     #path('hotels/book/<int:room_id>/', views.book_room, name='book_room'),   
