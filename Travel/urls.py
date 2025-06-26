@@ -11,7 +11,7 @@ urlpatterns = [
     path('send_otp/', views.send_otp, name='send_otp'),
     path('verify_otp/', views.verify_otp, name='verify_otp'),
     path('tour/',views.tour,name='tour'),
-    path('tour/',views.available_tours,name='available_tours'),
+    #path('tour/',views.available_tours,name='available_tours'),
     path('available-tours/', views.available_tours, name='available_tours'),
     path('tour_details/',views.tour_details,name='tour_details'),
     path ('blog-details', views.blogDetails, name = 'blogDetails'),
@@ -23,7 +23,7 @@ urlpatterns = [
     path('payment/<int:bus_id>/', views.payment, name='payment'),
     path('tours/', views.tour_list, name='tour_list'),
     path('submit-feedback/', views.submit_feedback, name='submit_feedback'),
-    path('logout/', views.logout_view, name='logout'),
+    path('logout/', views.logout_view, name='logout_view'),
 
     #path('hotels/', views.hotel_list, name='hotel_list'),
     #path('hotels/<int:hotel_id>/', views.hotel_detail, name='hotel_detail'),
