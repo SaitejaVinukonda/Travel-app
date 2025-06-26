@@ -8,6 +8,8 @@ from Tourism import settings
 from django.core.mail import send_mail
 from .models import CustomUser
 from django.contrib import messages
+import random
+from .utils import sendOTPtOEmail
 from django.db import transaction
 from django.db.models import Q
 #from django.http import JsonResponse
@@ -108,6 +110,55 @@ def register_view(request):
 
     return render(request, 'register.html', {'error': error})
 
+def send_otp(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+
+        if not email:
+            messages.error(request, "Email is required.")
+            return redirect('login_view')
+
+        custom_user = CustomUser.objects.filter(email=email)
+        if not custom_user.exists():
+            messages.warning(request, "No account found with this email.")
+            return redirect('login_view')
+
+        otp = random.randint(1000, 9999)
+        custom_user.update(otp=otp)
+
+        try:
+            sendOTPtOEmail(email, otp)
+            messages.success(request, f"OTP sent to {email}")
+        except Exception as e:
+            messages.error(request, f"Failed to send OTP: {str(e)}")
+            return redirect('login_view')
+
+        return render(request, 'otp.html', {'email': email})
+
+    # ✅ Render blank OTP form when user clicks "Login with OTP"
+    return render(request, 'otp.html')
+
+def verify_otp(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        otp_input = request.POST.get('otp')
+
+        user = CustomUser.objects.filter(email=email).first()
+
+        if not user:
+            messages.error(request, "No account found.")
+            return redirect('login_view')
+
+        if str(user.otp) == str(otp_input):
+            messages.success(request, "OTP verified successfully!")
+            request.session['user_id'] = user.id  # or login(request, user)
+            return redirect('home')
+        else:
+            messages.error(request, "Invalid OTP.")
+            return render(request, 'otp.html', {'email': email})
+   
+#def enter_otp(request, email):
+#    return render(request, 'otp.html', {'email': email})
 def forgot_password(request):
     message = error = ''
     if request.method == 'POST':
