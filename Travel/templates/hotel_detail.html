@@ -1,0 +1,40 @@
+<!-- hotel_detail.html -->
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ hotel.name }} - Details</title>
+    <style>
+        body {
+            font-family: Arial;
+            background-color: #f9f9f9;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            padding: 30px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .btn {
+            background-color: #28a745;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 4px;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>{{ hotel.name }}</h1>
+        <p><strong>Location:</strong> {{ hotel.location }}</p>
+        <p><strong>Description:</strong> {{ hotel.description }}</p>
+        <p><strong>Price:</strong> ₹{{ hotel.price }}</p>
+
+        <a href="{% url 'book_room' hotel.id %}" class="btn">Book Room</a>
+    </div>
+</body>
+</html>
+
