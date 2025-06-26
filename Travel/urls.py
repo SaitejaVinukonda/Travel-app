@@ -21,6 +21,8 @@ urlpatterns = [
     path('payment/<int:bus_id>/', views.payment, name='payment'),
     path('tours/', views.tour_list, name='tour_list'),
     path('submit-feedback/', views.submit_feedback, name='submit_feedback'),
+    path('logout/', views.logout_view, name='logout'),
+
     #path('hotels/', views.hotel_list, name='hotel_list'),
     #path('hotels/<int:hotel_id>/', views.hotel_detail, name='hotel_detail'),
     #path('hotels/book/<int:room_id>/', views.book_room, name='book_room'),   
