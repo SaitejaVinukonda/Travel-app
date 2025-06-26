@@ -15,6 +15,8 @@ from django.db.models import Q
 from .models import Hotel, HotelRoom, HotelBooking
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import logout
+
 #from django.http import JsonResponse
 #from django.views.decorators.csrf import csrf_exempt
 #from google.cloud import dialogflow_v2 as dialogflow
@@ -383,11 +385,18 @@ def submit_feedback(request):
         messages.success(request, 'Feedback submitted successfully!')
         return redirect('contact')
     return redirect('contact')
+
+def logout_view(request):
+    if request.method == 'POST':
+        logout(request)
+        return redirect('login_view')
+    return render(request, 'logout.html')
 def tour_details(request):
     return render(request, 'tourdetailslist.html')
 def blogDetails(request):
     return render(request, "blogDetails.html")
     
+
 #def hotel_list(request):
 #    hotels = Hotel.objects.all()
 #    return render(request, 'hotel_list.html', {'hotels': hotels})
