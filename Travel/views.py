@@ -12,6 +12,9 @@ import random
 from .utils import sendOTPtOEmail
 from django.db import transaction
 from django.db.models import Q
+from .models import Hotel, HotelRoom, HotelBooking
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
 #from django.http import JsonResponse
 #from django.views.decorators.csrf import csrf_exempt
 #from google.cloud import dialogflow_v2 as dialogflow
@@ -380,3 +383,28 @@ def submit_feedback(request):
         messages.success(request, 'Feedback submitted successfully!')
         return redirect('contact')
     return redirect('contact')
+#def hotel_list(request):
+#    hotels = Hotel.objects.all()
+#    return render(request, 'hotel_list.html', {'hotels': hotels})
+#
+#def hotel_detail(request, hotel_id):
+#    hotel = get_object_or_404(Hotel, id=hotel_id)
+#    rooms = HotelRoom.objects.filter(hotel=hotel, is_available=True)
+#    return render(request, 'hotel_detail.html', {'hotel': hotel, 'rooms': rooms})
+#
+#@login_required
+#def book_room(request, room_id):
+#    room = get_object_or_404(HotelRoom, id=room_id)
+#    if request.method == "POST":
+#        check_in = request.POST.get('check_in')
+#        check_out = request.POST.get('check_out')
+#        booking = HotelBooking.objects.create(
+#            user=request.user,
+#            room=room,
+#            check_in=check_in,
+#            check_out=check_out
+#        )
+#        room.is_available = False
+#        room.save()
+#        return redirect('hotel_list')
+#    return render(request, 'book_room.html', {'room': room})

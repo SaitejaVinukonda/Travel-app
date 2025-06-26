@@ -1,0 +1,51 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Book Room - {{ hotel.name }}</title>
+    <style>
+        body {
+            background-color: #f7f7f7;
+            font-family: Arial;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        }
+        input, select, button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Book Room at {{ hotel.name }}</h2>
+        <form method="POST">
+            {% csrf_token %}
+            <label for="check_in">Check-in Date:</label>
+            <input type="date" name="check_in" required>
+
+            <label for="check_out">Check-out Date:</label>
+            <input type="date" name="check_out" required>
+
+            <label for="guests">Number of Guests:</label>
+            <input type="number" name="guests" required min="1">
+
+            <button type="submit">Book Now</button>
+        </form>
+    </div>
+</body>
+</html>
