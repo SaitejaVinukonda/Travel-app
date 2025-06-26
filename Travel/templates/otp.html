@@ -1,0 +1,65 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Login with OTP</title>
+  <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+  <style>
+    body {
+      background-image: url("{% static 'images/about_4.jpg' %}");
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0;
+    }
+
+    .card-wrapper {
+      background-color: rgba(255, 255, 255, 0.95);
+      padding: 2rem;
+      border-radius: 20px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+      max-width: 450px;
+      width: 100%;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="card-wrapper">
+    <h2>Login with OTP</h2>
+    {% include "utils/alerts.html" %}
+
+    <!-- 🔹 Step 1: Send OTP Form -->
+    <form action="{% url 'send_otp' %}" method="POST">
+      {% csrf_token %}
+      <div class="mb-3">
+        <label for="email" class="form-label">Email address</label>
+        <input type="email" name="email" class="form-control" id="email" required>
+      </div>
+      <button type="submit" class="btn btn-secondary w-100">Send OTP</button>
+    </form>
+
+    <hr>
+
+    <!-- 🔹 Step 2: OTP Submission Form -->
+    <form action="{% url 'verify_otp' %}" method="POST">
+      {% csrf_token %}
+      <input type="hidden" name="email" value="{{ email }}">
+      <div class="mb-3">
+        <label for="otp" class="form-label">Enter OTP</label>
+        <input type="text" name="otp" class="form-control" id="otp" required>
+      </div>
+      <button type="submit" class="btn btn-primary w-100">Submit</button>
+    </form>
+  </div>
+</body>
+</html>

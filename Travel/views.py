@@ -3,12 +3,13 @@ from django.shortcuts import render,redirect
 from django.http import HttpResponse,HttpResponseBadRequest
 from django.contrib.auth import authenticate, login
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Bus, Seat,Booking,TravelPackage
-from .models import Tour
+from .models import Tour,Bus, Seat,Booking,TravelPackage
 from Tourism import settings
 from django.core.mail import send_mail
 from .models import CustomUser
 from django.contrib import messages
+import random
+from .utils import sendOTPtOEmail
 from django.db import transaction
 from django.db.models import Q
 #from django.http import JsonResponse
@@ -109,8 +110,55 @@ def register_view(request):
 
     return render(request, 'register.html', {'error': error})
 
+def send_otp(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
 
+        if not email:
+            messages.error(request, "Email is required.")
+            return redirect('login_view')
 
+        custom_user = CustomUser.objects.filter(email=email)
+        if not custom_user.exists():
+            messages.warning(request, "No account found with this email.")
+            return redirect('login_view')
+
+        otp = random.randint(1000, 9999)
+        custom_user.update(otp=otp)
+
+        try:
+            sendOTPtOEmail(email, otp)
+            messages.success(request, f"OTP sent to {email}")
+        except Exception as e:
+            messages.error(request, f"Failed to send OTP: {str(e)}")
+            return redirect('login_view')
+
+        return render(request, 'otp.html', {'email': email})
+
+    # ✅ Render blank OTP form when user clicks "Login with OTP"
+    return render(request, 'otp.html')
+
+def verify_otp(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        otp_input = request.POST.get('otp')
+
+        user = CustomUser.objects.filter(email=email).first()
+
+        if not user:
+            messages.error(request, "No account found.")
+            return redirect('login_view')
+
+        if str(user.otp) == str(otp_input):
+            messages.success(request, "OTP verified successfully!")
+            request.session['user_id'] = user.id  # or login(request, user)
+            return redirect('home')
+        else:
+            messages.error(request, "Invalid OTP.")
+            return render(request, 'otp.html', {'email': email})
+   
+#def enter_otp(request, email):
+#    return render(request, 'otp.html', {'email': email})
 def forgot_password(request):
     message = error = ''
     if request.method == 'POST':
@@ -121,7 +169,7 @@ def forgot_password(request):
             send_mail(
                 'Password Reset Request',
                 f'Click the link to reset your password: {reset_link}',
-                'your_email@gmail.com',  # set this in settings.py
+                'your_email@gmail.com',  
                 [email],
                 fail_silently=False,
             )
@@ -141,7 +189,7 @@ def reset_password(request, user_id):
         else:
             try:
                 user = CustomUser.objects.get(id=user_id)
-                user.password = password1  # Optional: hash before saving
+                user.password = password1  
                 user.save()
                 success = 'Password reset successful.'
                 return redirect('login_view')
@@ -168,10 +216,14 @@ def bus_list(request):
 
 
 def view_seats(request, bus_id):
+
+    user_id = request.session.get('user_id')
+    if not user_id:
+        messages.error(request, "Please log in to book a seat.")
+        return redirect('login_view')
+
     bus = get_object_or_404(Bus, id=bus_id)
     seats = Seat.objects.filter(bus=bus).order_by('seat_number')
-
-    # Arrange seats in a 4-column grid with an aisle
     seat_map = []
     row = []
     for i, seat in enumerate(seats):
@@ -179,16 +231,12 @@ def view_seats(request, bus_id):
         if (i + 1) % 4 == 0:
             seat_map.append(row[:2] + ['aisle'] + row[2:])
             row = []
-    if row:  # Add remaining seats if any
+    if row:
         seat_map.append(row)
-
-    # ✅ Check if all seats are booked
     all_seats_booked = all(seat.is_booked for seat in seats)
-
     if request.method == 'POST':
         selected_seat_ids = request.POST.getlist('seats')
         selected_seats = Seat.objects.filter(id__in=selected_seat_ids, is_booked=False)
-
         if not selected_seats:
             return render(request, 'view_seat.html', {
                 'bus': bus,
@@ -219,9 +267,7 @@ def booking_summary(request):
     seat_numbers = request.session.get('selected_seat_numbers', [])
     bus_id = request.session.get('bus_id')
     total_price = request.session.get('total_price', 0)
-
     bus = get_object_or_404(Bus, id=bus_id)
-
     return render(request, 'booking_summary.html', {
         'bus': bus,
         'selected_seats': ', '.join(seat_numbers),
@@ -235,7 +281,6 @@ def payment_form(request):
     
     if not bus_id or not seat_ids:
         return HttpResponseBadRequest("Missing bus or seat info.")
-
     bus = get_object_or_404(Bus, id=bus_id)
     seats = Seat.objects.filter(id__in=seat_ids)
     total_price = float(bus.price) * len(seats)
@@ -249,7 +294,6 @@ def payment_form(request):
 @transaction.atomic
 def payment(request, bus_id):
     
-    # ✅ Step 2: Validate session seat data
     seat_ids = request.session.get('selected_seat_ids', [])
     if not seat_ids:
         return HttpResponseBadRequest("No seats selected.")
@@ -257,11 +301,7 @@ def payment(request, bus_id):
     seats_to_book = Seat.objects.select_for_update().filter(id__in=seat_ids, is_booked=False)
     if not seats_to_book.exists():
         return HttpResponseBadRequest("Selected seats are already booked or invalid.")
-
-    # ✅ Step 3: Get Bus instance
     bus = get_object_or_404(Bus, id=bus_id)
-
-    # ✅ Step 4: Get current logged-in user from session
     user = None
     user_id = request.session.get('user_id')
     if user_id:
@@ -269,20 +309,13 @@ def payment(request, bus_id):
             user = CustomUser.objects.get(id=user_id)
         except CustomUser.DoesNotExist:
             return HttpResponseBadRequest("User not found. Please log in again.")
-
-    # ✅ Step 5: Create booking
     booking = Booking.objects.create(bus=bus, user=user)
     booking.seats.set(seats_to_book)
-
-    # ✅ Step 6: Mark seats as booked
     for seat in seats_to_book:
         seat.is_booked = True
         seat.save()
-
     seat_numbers = [seat.seat_number for seat in seats_to_book]
     total_price = float(bus.price) * len(seat_numbers)
-
-    # ✅ Step 7: Send confirmation email
     if user and user.email:
         subject = '🚌 Your Bus Booking is Confirmed!'
         message = (
@@ -296,7 +329,6 @@ def payment(request, bus_id):
             f"We wish you a safe and pleasant journey.\n\n"
             f"Regards,\nBus Booking Team"
         )
-
         send_mail(
             subject=subject,
             message=message,
@@ -304,8 +336,6 @@ def payment(request, bus_id):
             recipient_list=[user.email],
             fail_silently=False,
         )
-
-    # ✅ Step 8: Show confirmation page
     return render(request, 'payment.html', {
         'booked_seats': seat_numbers
     })
@@ -318,8 +348,11 @@ def available_tours(request):
         tours = Tour.objects.filter(Q(name__icontains=query) | Q(location__icontains=query))
         context['tours'] = tours  
     else:
+        most_visited = Tour.objects.filter(most_visited=True)[:6]   
+        context['most_visited'] = most_visited
         most_visited = Tour.objects.filter(most_visited=True)[:6]
         context['most_visited'] = most_visited  
+
 
     return render(request, 'TourPackages.html', context)
 

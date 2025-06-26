@@ -2,12 +2,15 @@ from django.urls import path
 from Travel import views
 urlpatterns = [
     path('',views.home,name=' '),
-    path('home/',views.home, name='home'),
+    path('home',views.home, name='home'),
     path('about/',views.about,name='about'),
     path('contact/',views.contact,name='contact'),
     path('login/',views.login_view,name='login_view'),
     path('register/',views.register_view,name='register_view'),
     path('forgot_password/', views.forgot_password, name='forgot_password'),
+    path('send_otp/', views.send_otp, name='send_otp'),
+    path('verify_otp/', views.verify_otp, name='verify_otp'),
+    path('tour/',views.tour,name='tour'),
     path('tour/',views.available_tours,name='available_tours'),
     path('available-tours/', views.available_tours, name='available_tours'),
     path('reset-password/<int:user_id>/',views.reset_password,name='reset_password'),
