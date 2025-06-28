@@ -125,7 +125,7 @@
     }
 
     .footer-bottom {
-      background-color: #0f6674;
+      background-color: #070808;
       color: #f1f1f1;
     }
 
@@ -181,8 +181,8 @@
               <p class="location">🌍 {{ tour.location }}</p>
               <div class="price-book">
                 <p class="mb-0"><strong>₹{{ tour.price }}</strong></p>
+                <a href="{% url 'tour_details'  tour.id %}" class="btn btn-dark btn-sm btn-animate">Details</a>
                 <a href="{% url 'bus_list' %}" class="btn btn-dark btn-sm btn-animate">Book Now</a>
-                <a href="{% url 'tour_details' %}" class="btn btn-dark btn-sm btn-animate">Book Now</a>
               </div>
             </div>
           </div>
@@ -203,8 +203,8 @@
             <p class="location">🌍 {{ tour.location }}</p>
             <div class="price-book">
               <p class="mb-0"><strong>₹{{ tour.price }}</strong></p>
-              <a href="{% url 'bus_list' %}" class="btn btn-dark btn-sm btn-animate">Book Now</a>
-              <a href="{% url 'tour_details'%}" class="btn btn-dark btn-sm btn-animate">Book Now</a>
+              <a href="{% url 'tour_details'  tour.id %}" class="btn btn-dark btn-sm btn-animate">Details</a>
+              <a href="{% url 'bus_list' %}" class="btn btn-dark btn-sm btn-animate">Book Now</a>  
             </div>
           </div>
         </div>

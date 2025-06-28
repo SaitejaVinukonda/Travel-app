@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,get_object_or_404
 from django.http import HttpResponse,HttpResponseBadRequest
 from django.contrib.auth import authenticate, login
 from django.shortcuts import render, get_object_or_404, redirect
@@ -202,11 +202,11 @@ def reset_password(request, user_id):
                 error = 'Invalid link.'
     return render(request, 'reset_password.html', {'error': error, 'success': success})
 
-@login_required
+#@login_required
 def tour(request):
     packages = TravelPackage.objects.all()
     return render(request, 'TourPackages.html',{'packages': packages})
-@login_required
+#@login_required
 def bus_list(request):
     source = request.GET.get('source')
     destination = request.GET.get('destination')
@@ -219,7 +219,7 @@ def bus_list(request):
     return render(request, 'bus_list.html', {'buses': buses})
 
 
-@login_required
+#@login_required
 def view_seats(request, bus_id):
 
     user_id = request.session.get('user_id')
@@ -266,7 +266,7 @@ def view_seats(request, bus_id):
         'all_seats_booked': all_seats_booked
     })
 
-@login_required
+#@login_required
 def booking_summary(request):
     seat_ids = request.session.get('selected_seat_ids', [])
     seat_numbers = request.session.get('selected_seat_numbers', [])
@@ -279,7 +279,7 @@ def booking_summary(request):
         'total_price': total_price
     })
 
-@login_required
+#@login_required
 def payment_form(request):
     bus_id = request.session.get('bus_id')
     seat_ids = request.session.get('selected_seat_ids', [])
@@ -344,7 +344,7 @@ def payment(request, bus_id):
     return render(request, 'payment.html', {
         'booked_seats': seat_numbers
     })
-@login_required
+#@login_required
 def available_tours(request):
     query = request.GET.get('q', '')
     context = {'query': query}
@@ -353,15 +353,14 @@ def available_tours(request):
         tours = Tour.objects.filter(Q(name__icontains=query) | Q(location__icontains=query))
         context['tours'] = tours  
     else:
-        most_visited = Tour.objects.filter(most_visited=True)[:6]   
-        context['most_visited'] = most_visited
         most_visited = Tour.objects.filter(most_visited=True)[:6]
-        context['most_visited'] = most_visited  
+        context['most_visited'] = most_visited
+        context['tours'] = most_visited  
 
 
     return render(request, 'TourPackages.html', context)
 
-@login_required
+#@login_required
 def tour_list(request):
     query = request.GET.get('q')  
     if query:
@@ -385,8 +384,9 @@ def submit_feedback(request):
         messages.success(request, 'Feedback submitted successfully!')
         return redirect('contact')
     return redirect('contact')
-def tour_details(request):
-    return render(request, 'tourdetailslist.html')
+def tour_details(request, id):
+    tour = get_object_or_404(Tour, id=id)  # Fetches the tour or shows 404 if not found
+    return render(request, 'tour_details.html', {'tour': tour})
 def blogDetails(request):
     return render(request, "blogDetails.html")
 def logout_view(request):
