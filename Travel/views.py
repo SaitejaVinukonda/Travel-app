@@ -202,11 +202,11 @@ def reset_password(request, user_id):
                 error = 'Invalid link.'
     return render(request, 'reset_password.html', {'error': error, 'success': success})
 
-@login_required
+
 def tour(request):
     packages = TravelPackage.objects.all()
     return render(request, 'TourPackages.html',{'packages': packages})
-@login_required
+
 def bus_list(request):
     source = request.GET.get('source')
     destination = request.GET.get('destination')
@@ -219,7 +219,7 @@ def bus_list(request):
     return render(request, 'bus_list.html', {'buses': buses})
 
 
-@login_required
+
 def view_seats(request, bus_id):
 
     user_id = request.session.get('user_id')
@@ -266,7 +266,7 @@ def view_seats(request, bus_id):
         'all_seats_booked': all_seats_booked
     })
 
-@login_required
+
 def booking_summary(request):
     seat_ids = request.session.get('selected_seat_ids', [])
     seat_numbers = request.session.get('selected_seat_numbers', [])
@@ -279,7 +279,7 @@ def booking_summary(request):
         'total_price': total_price
     })
 
-@login_required
+
 def payment_form(request):
     bus_id = request.session.get('bus_id')
     seat_ids = request.session.get('selected_seat_ids', [])
@@ -344,7 +344,7 @@ def payment(request, bus_id):
     return render(request, 'payment.html', {
         'booked_seats': seat_numbers
     })
-@login_required
+
 def available_tours(request):
     query = request.GET.get('q', '')
     context = {'query': query}
@@ -361,7 +361,7 @@ def available_tours(request):
 
     return render(request, 'TourPackages.html', context)
 
-@login_required
+
 def tour_list(request):
     query = request.GET.get('q')  
     if query:
