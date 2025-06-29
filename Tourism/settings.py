@@ -142,4 +142,4 @@ EMAIL_HOST_PASSWORD='ddobcaqemhgurxkd'
 
 
 DEFAULT_FROM_EMAIL='trawellpro@gmail.com'
-LOGIN_URL = 'login_view'
+#LOGIN_URL = 'login_view'
