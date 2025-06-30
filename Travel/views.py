@@ -386,19 +386,17 @@ def submit_feedback(request):
         return redirect('contact')
     return redirect('contact')
 
-def logout_view(request):
-    if request.method == 'POST':
-        logout(request)
-        return redirect('login_view')
-    return render(request, 'logout.html')
+# def logout_view(request):
+#     if request.method == 'POST':
+#         logout(request)
+#         messages.success(request, "You have been logged out successfully.")
+#         return redirect('login_view')
+#     return render(request, 'logout.html')
 def tour_details(request):
     return render(request, 'tourdetailslist.html')
 def blogDetails(request):
     return render(request, "blogDetails.html")
-def logout_view(request):
-    logout(request)
-    messages.success(request, "You have been logged out successfully.")
-    return redirect('login_view')
+
     
 #def hotel_list(request):
 #    hotels = Hotel.objects.all()
