@@ -15,7 +15,7 @@ from django.db.models import Q
 from .models import Hotel, HotelRoom, HotelBooking
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import logout
+# from django.contrib.auth import logout
 
 #from django.http import JsonResponse
 #from django.views.decorators.csrf import csrf_exempt
@@ -202,25 +202,16 @@ def reset_password(request, user_id):
                 error = 'Invalid link.'
     return render(request, 'reset_password.html', {'error': error, 'success': success})
 
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> 0c0cc73ea9b4dbbd1d8283a790aa360bca773e3c
 
 def tour(request):
     packages = TravelPackage.objects.all()
     return render(request, 'TourPackages.html',{'packages': packages})
 
-<<<<<<< HEAD
-=======
-=======
 #@login_required
 def tour(request):
     packages = TravelPackage.objects.all()
     return render(request, 'TourPackages.html',{'packages': packages})
 #@login_required
->>>>>>> 5e1866db8cf8a708a9244f66f74ffe0b20e79773
->>>>>>> 0c0cc73ea9b4dbbd1d8283a790aa360bca773e3c
 def bus_list(request):
     source = request.GET.get('source')
     destination = request.GET.get('destination')
@@ -233,15 +224,8 @@ def bus_list(request):
     return render(request, 'bus_list.html', {'buses': buses})
 
 
-<<<<<<< HEAD
 
-=======
-<<<<<<< HEAD
-
-=======
 #@login_required
->>>>>>> 5e1866db8cf8a708a9244f66f74ffe0b20e79773
->>>>>>> 0c0cc73ea9b4dbbd1d8283a790aa360bca773e3c
 def view_seats(request, bus_id):
 
     user_id = request.session.get('user_id')
@@ -288,15 +272,7 @@ def view_seats(request, bus_id):
         'all_seats_booked': all_seats_booked
     })
 
-<<<<<<< HEAD
-
-=======
-<<<<<<< HEAD
-
-=======
 #@login_required
->>>>>>> 5e1866db8cf8a708a9244f66f74ffe0b20e79773
->>>>>>> 0c0cc73ea9b4dbbd1d8283a790aa360bca773e3c
 def booking_summary(request):
     seat_ids = request.session.get('selected_seat_ids', [])
     seat_numbers = request.session.get('selected_seat_numbers', [])
@@ -309,15 +285,7 @@ def booking_summary(request):
         'total_price': total_price
     })
 
-<<<<<<< HEAD
-
-=======
-<<<<<<< HEAD
-
-=======
 #@login_required
->>>>>>> 5e1866db8cf8a708a9244f66f74ffe0b20e79773
->>>>>>> 0c0cc73ea9b4dbbd1d8283a790aa360bca773e3c
 def payment_form(request):
     bus_id = request.session.get('bus_id')
     seat_ids = request.session.get('selected_seat_ids', [])
@@ -382,15 +350,7 @@ def payment(request, bus_id):
     return render(request, 'payment.html', {
         'booked_seats': seat_numbers
     })
-<<<<<<< HEAD
-
-=======
-<<<<<<< HEAD
-
-=======
 #@login_required
->>>>>>> 5e1866db8cf8a708a9244f66f74ffe0b20e79773
->>>>>>> 0c0cc73ea9b4dbbd1d8283a790aa360bca773e3c
 def available_tours(request):
     query = request.GET.get('q', '')
     context = {'query': query}
@@ -406,15 +366,8 @@ def available_tours(request):
 
     return render(request, 'TourPackages.html', context)
 
-<<<<<<< HEAD
 
-=======
-<<<<<<< HEAD
-
-=======
 #@login_required
->>>>>>> 5e1866db8cf8a708a9244f66f74ffe0b20e79773
->>>>>>> 0c0cc73ea9b4dbbd1d8283a790aa360bca773e3c
 def tour_list(request):
     query = request.GET.get('q')  
     if query:
@@ -438,7 +391,6 @@ def submit_feedback(request):
         messages.success(request, 'Feedback submitted successfully!')
         return redirect('contact')
     return redirect('contact')
-<<<<<<< HEAD
 
 # def logout_view(request):
 #     if request.method == 'POST':
@@ -448,11 +400,9 @@ def submit_feedback(request):
 #     return render(request, 'logout.html')
 def tour_details(request):
     return render(request, 'tourdetailslist.html')
-=======
 def tour_details(request, id):
     tour = get_object_or_404(Tour, id=id)  # Fetches the tour or shows 404 if not found
     return render(request, 'tour_details.html', {'tour': tour})
->>>>>>> 0c0cc73ea9b4dbbd1d8283a790aa360bca773e3c
 def blogDetails(request):
     return render(request, "blogDetails.html")
 
