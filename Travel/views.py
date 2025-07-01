@@ -216,7 +216,6 @@ def reset_password(request, user_id):
             except CustomUser.DoesNotExist:
                 error = 'Invalid link.'
     return render(request, 'reset_password.html', {'error': error, 'success': success})
-
 def tour(request):
     packages = TravelPackage.objects.all()
     return render(request, 'TourPackages.html',{'packages': packages})
@@ -238,9 +237,9 @@ def bus_list(request):
         
     return render(request, 'bus_list.html', {'buses': buses})
 
+
 #@login_required
 #@login_required
-#@login
 def view_seats(request, bus_id):
 
     user_id = request.session.get('user_id')
@@ -300,8 +299,6 @@ def booking_summary(request):
         'total_price': total_price
     })
 
-
-#@login_required
 #@login_required
 #@login_required
 def payment_form(request):
@@ -383,6 +380,7 @@ def available_tours(request):
 
 
     return render(request, 'TourPackages.html', context)
+
 
 #@login_required
 def tour_list(request):
