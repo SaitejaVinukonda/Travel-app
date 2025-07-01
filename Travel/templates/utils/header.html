@@ -65,7 +65,7 @@
             </div>
           {% else %}
             <a href="{% url 'login_view' %}" class="cs_signin_btn">
-              <i class="fa-solid fa-user" style="margin-right: 8px;"></i>
+              <i class="fa-solid fa-user" style="margin-right: 1px;"></i>
             </a>
           {% endif %}
         </div>
@@ -78,20 +78,32 @@
 <!-- Styling -->
 <style>
   .cs_signin_btn {
-    display: flex;
-    align-items: center;
-    background: white;
-    border-radius: ;
-    padding: 6px 12px;
-    color: black;
-    text-decoration: none;
-    font-weight: 500;
-    transition: background 0.3s ease;
-  }
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  border: 2px solid #e0e0e0;
+  border-radius: 50%;
+  width: 70px;
+  height: 70px;
+  color: black;
+  text-decoration: none;
+  font-weight: 500;
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
 
-  .cs_signin_btn:hover {
-    background-color: #f0f0f0;
-  }
+.cs_signin_btn:hover {
+  background-color:rgb(31, 146, 241);
+  box-shadow: 0 4px 12px hsla(0, 17.90%, 89.00%, 0.97);
+}
+
+.cs_signin_btn i {
+  font-size: 30px;
+  align-items: center;
+  justify-content: center;
+}
 
   .cs_profile_menu {
     position: relative;
