@@ -75,6 +75,10 @@ from .models import CustomUser, PasswordResetRequest
 from django.contrib.auth.hashers import make_password, check_password
 
 def login_view(request):
+    # ✅ If already logged in, redirect to profile
+    if request.session.get('user_id'):
+        return redirect('profile_view')
+
     error = None
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -83,15 +87,26 @@ def login_view(request):
         try:
             user = CustomUser.objects.get(username=username)
             if check_password(password, user.password):
-                # You can implement session login manually here if needed
                 request.session['user_id'] = user.id
-                return redirect('home')
+                return redirect('profile_view')
             else:
                 error = "Invalid username or password"
         except CustomUser.DoesNotExist:
             error = "Invalid username or password"
 
     return render(request, 'login.html', {'error': error})
+def profile_view(request):
+    user_id = request.session.get('user_id')
+    if not user_id:
+        return redirect('login_view')
+
+    try:
+        user = CustomUser.objects.get(id=user_id)
+        bookings = Booking.objects.filter(user=user).select_related('bus')
+    except CustomUser.DoesNotExist:
+        return redirect('login_view')
+
+    return render(request, 'profile.html', {'user': user, 'bookings': bookings})
 
 
 def register_view(request):
@@ -404,6 +419,12 @@ def tour_details(request, id):
     return render(request, 'tour_details.html', {'tour': tour})
 def blogDetails(request):
     return render(request, "blogDetails.html")
+def logout_view(request):
+    request.session.flush()  # ✅ Clears all session data
+    return redirect('login_view')
+def chat(request):
+    return render(request, "chatbot.html")
+
 
     
 #def hotel_list(request):
