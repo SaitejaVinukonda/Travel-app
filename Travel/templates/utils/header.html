@@ -45,7 +45,120 @@
               <div>
                 <button class="cs_search_btn cs_fs_24" type="button"><i class="fa-solid fa-magnifying-glass"></i></button>
               </div>
-              <div class="cs_fs_20 cs_medium">+8 (123) 985 789</div>
+              <!-- Right Toolbox: Search + Login/Profile -->
+      <div class="cs_main_header_right">
+        <div class="cs_header_toolbox" style="display: flex; align-items: center; gap: 15px; position: relative;">
+  
+
+          <!-- Conditional Signin/Profile Dropdown -->
+          {% if user.is_authenticated %}
+            <div class="cs_profile_menu">
+              <button class="cs_profile_btn" onclick="toggleDropdown()">
+                <i class="fa-solid fa-user"></i>
+              </button>
+              <div class="cs_dropdown" id="profileDropdown">
+                <a href="{% url 'profile_view'%}">My Profile</a>
+                <a href="#">Settings</a>
+                <a href="{% url 'logout_view' %}">Logout</a>
+              </div>
+            </div>
+          {% else %}
+            <a href="{% url 'login_view' %}" class="cs_signin_btn">
+              <i class="fa-solid fa-user" style="margin-right: 8px;"></i>
+            </a>
+          {% endif %}
+        </div>
+      </div>
+
+    </div>
+  </div>
+</header>
+
+<!-- Styling -->
+<style>
+  .cs_signin_btn {
+    display: flex;
+    align-items: center;
+    background: white;
+    border-radius: ;
+    padding: 6px 12px;
+    color: black;
+    text-decoration: none;
+    font-weight: 500;
+    transition: background 0.3s ease;
+  }
+
+  .cs_signin_btn:hover {
+    background-color: #f0f0f0;
+  }
+
+  .cs_profile_menu {
+    position: relative;
+  }
+
+ .cs_profile_btn {
+  background-color: #ffffff;
+  color: #333;
+  border: 1px solid #ddd;
+  border-radius: 30px;
+  padding: 10px 20px;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.cs_profile_btn:hover {
+  background-color: #f5f5f5;
+  border-color: #ccc;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+}
+
+  .cs_dropdown {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 45px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    min-width: 150px;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .cs_dropdown a {
+    display: block;
+    padding: 10px 15px;
+    color: black;
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  .cs_dropdown a:hover {
+    background-color: #f5f5f5;
+  }
+</style>
+
+<!-- Script -->
+<script>
+  function toggleDropdown() {
+    const dropdown = document.getElementById("profileDropdown");
+    dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+  }
+
+  document.addEventListener("click", function (e) {
+    const dropdown = document.getElementById("profileDropdown");
+    const button = document.querySelector(".cs_profile_btn");
+
+    if (dropdown && button && !button.contains(e.target) && !dropdown.contains(e.target)) {
+      dropdown.style.display = "none";
+    }
+  });
+</script>
             </div>
           </div>
         </div>
