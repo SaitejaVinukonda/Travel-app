@@ -105,7 +105,7 @@
         </div>
     </div>
 
-    <button type="submit">Pay ₹{{ total_price }}</button>
+    <button type="submit">Pay ₹{{ total_price|floatformat:2 }}</button>
 </form>
 
 </body>

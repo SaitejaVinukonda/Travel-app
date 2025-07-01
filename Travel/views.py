@@ -15,6 +15,7 @@ from django.db.models import Q
 from .models import Hotel, HotelRoom, HotelBooking
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from decimal import Decimal
 # from django.contrib.auth import logout
 
 #from django.http import JsonResponse
@@ -288,18 +289,31 @@ def view_seats(request, bus_id):
     })
 
 #@login_required
+
 def booking_summary(request):
     seat_ids = request.session.get('selected_seat_ids', [])
     seat_numbers = request.session.get('selected_seat_numbers', [])
     bus_id = request.session.get('bus_id')
-    total_price = request.session.get('total_price', 0)
+    tour_id = request.session.get('tour_id')
+
+    # Convert float from session to Decimal
+    total_price = Decimal(str(request.session.get('total_price', 0)))
+
     bus = get_object_or_404(Bus, id=bus_id)
+    tour = get_object_or_404(Tour, id=tour_id)
+    tour_price = tour.price  # Already a Decimal
+
+    # Add both Decimals safely
+    grand_total = total_price + tour_price
+
     return render(request, 'booking_summary.html', {
         'bus': bus,
         'selected_seats': ', '.join(seat_numbers),
-        'total_price': total_price
+        'total_price': total_price,
+        'tour': tour,
+        'tour_price': tour_price,
+        'grand_total': grand_total
     })
-
 
 #@login_required
 #@login_required
@@ -307,12 +321,19 @@ def booking_summary(request):
 def payment_form(request):
     bus_id = request.session.get('bus_id')
     seat_ids = request.session.get('selected_seat_ids', [])
-    
-    if not bus_id or not seat_ids:
-        return HttpResponseBadRequest("Missing bus or seat info.")
+    tour_id = request.session.get('tour_id')  # Get tour ID
+
+    if not bus_id or not seat_ids or not tour_id:
+        return HttpResponseBadRequest("Missing booking info.")
+
     bus = get_object_or_404(Bus, id=bus_id)
+    tour = get_object_or_404(Tour, id=tour_id)
     seats = Seat.objects.filter(id__in=seat_ids)
-    total_price = float(bus.price) * len(seats)
+
+    # Compute prices
+    bus_total = float(bus.price) * len(seats)
+    tour_price = float(tour.price)  # Convert Decimal to float safely
+    total_price = bus_total + tour_price
 
     return render(request, 'payment_form.html', {
         'bus_id': bus_id,
@@ -420,6 +441,7 @@ def tour_details(request):
 
 def tour_details(request, id):
     tour = get_object_or_404(Tour, id=id)  # Fetches the tour or shows 404 if not found
+    request.session['tour_id'] = tour.id
     return render(request, 'tour_details.html', {'tour': tour})
 def blogDetails(request):
     return render(request, "blogDetails.html")
