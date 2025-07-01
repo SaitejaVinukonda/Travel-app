@@ -314,10 +314,6 @@ def booking_summary(request):
         'grand_total': grand_total
     })
 
-<<<<<<< HEAD
-#@login_required
-=======
->>>>>>> 6553ff3e541d3fa80f28b3833f06dab4fe07a509
 #@login_required
 #@login_required
 def payment_form(request):
