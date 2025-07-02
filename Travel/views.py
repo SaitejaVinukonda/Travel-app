@@ -15,6 +15,7 @@ from django.db.models import Q
 from .models import Hotel, HotelRoom, HotelBooking
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from decimal import Decimal
 # from django.contrib.auth import logout
 
 #from django.http import JsonResponse
@@ -216,7 +217,10 @@ def reset_password(request, user_id):
             except CustomUser.DoesNotExist:
                 error = 'Invalid link.'
     return render(request, 'reset_password.html', {'error': error, 'success': success})
+<<<<<<< HEAD
 
+=======
+>>>>>>> b3465a37905af281720ef8fc10b20af962546df3
 def tour(request):
     packages = TravelPackage.objects.all()
     return render(request, 'TourPackages.html',{'packages': packages})
@@ -239,7 +243,12 @@ def bus_list(request):
     return render(request, 'bus_list.html', {'buses': buses})
 
 
+<<<<<<< HEAD
 
+=======
+#@login_required
+#@login_required
+>>>>>>> b3465a37905af281720ef8fc10b20af962546df3
 def view_seats(request, bus_id):
 
     user_id = request.session.get('user_id')
@@ -286,28 +295,58 @@ def view_seats(request, bus_id):
         'all_seats_booked': all_seats_booked
     })
 
+<<<<<<< HEAD
+=======
+#@login_required
+
+>>>>>>> b3465a37905af281720ef8fc10b20af962546df3
 def booking_summary(request):
     seat_ids = request.session.get('selected_seat_ids', [])
     seat_numbers = request.session.get('selected_seat_numbers', [])
     bus_id = request.session.get('bus_id')
-    total_price = request.session.get('total_price', 0)
+    tour_id = request.session.get('tour_id')
+
+    # Convert float from session to Decimal
+    total_price = Decimal(str(request.session.get('total_price', 0)))
+
     bus = get_object_or_404(Bus, id=bus_id)
+    tour = get_object_or_404(Tour, id=tour_id)
+    tour_price = tour.price  # Already a Decimal
+
+    # Add both Decimals safely
+    grand_total = total_price + tour_price
+
     return render(request, 'booking_summary.html', {
         'bus': bus,
         'selected_seats': ', '.join(seat_numbers),
-        'total_price': total_price
+        'total_price': total_price,
+        'tour': tour,
+        'tour_price': tour_price,
+        'grand_total': grand_total
     })
 
+<<<<<<< HEAD
 
+=======
+#@login_required
+#@login_required
+>>>>>>> b3465a37905af281720ef8fc10b20af962546df3
 def payment_form(request):
     bus_id = request.session.get('bus_id')
     seat_ids = request.session.get('selected_seat_ids', [])
-    
-    if not bus_id or not seat_ids:
-        return HttpResponseBadRequest("Missing bus or seat info.")
+    tour_id = request.session.get('tour_id')  # Get tour ID
+
+    if not bus_id or not seat_ids or not tour_id:
+        return HttpResponseBadRequest("Missing booking info.")
+
     bus = get_object_or_404(Bus, id=bus_id)
+    tour = get_object_or_404(Tour, id=tour_id)
     seats = Seat.objects.filter(id__in=seat_ids)
-    total_price = float(bus.price) * len(seats)
+
+    # Compute prices
+    bus_total = float(bus.price) * len(seats)
+    tour_price = float(tour.price)  # Convert Decimal to float safely
+    total_price = bus_total + tour_price
 
     return render(request, 'payment_form.html', {
         'bus_id': bus_id,
@@ -363,7 +402,11 @@ def payment(request, bus_id):
     return render(request, 'payment.html', {
         'booked_seats': seat_numbers
     })
+<<<<<<< HEAD
 
+=======
+#@login_required
+>>>>>>> b3465a37905af281720ef8fc10b20af962546df3
 def available_tours(request):
     query = request.GET.get('q', '')
     context = {'query': query}
@@ -380,7 +423,10 @@ def available_tours(request):
     return render(request, 'TourPackages.html', context)
 
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> b3465a37905af281720ef8fc10b20af962546df3
 #@login_required
 def tour_list(request):
     query = request.GET.get('q')  
@@ -417,6 +463,7 @@ def tour_details(request):
 
 def tour_details(request, id):
     tour = get_object_or_404(Tour, id=id)  # Fetches the tour or shows 404 if not found
+    request.session['tour_id'] = tour.id
     return render(request, 'tour_details.html', {'tour': tour})
 def blogDetails(request):
     return render(request, "blogDetails.html")
