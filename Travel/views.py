@@ -216,11 +216,7 @@ def reset_password(request, user_id):
             except CustomUser.DoesNotExist:
                 error = 'Invalid link.'
     return render(request, 'reset_password.html', {'error': error, 'success': success})
-<<<<<<< HEAD
 
-
-=======
->>>>>>> c3ab2541f71a76364d3b8edcf8ef786b3db7ef0a
 def tour(request):
     packages = TravelPackage.objects.all()
     return render(request, 'TourPackages.html',{'packages': packages})
@@ -230,10 +226,7 @@ def tour(request):
     packages = TravelPackage.objects.all()
     return render(request, 'TourPackages.html',{'packages': packages})
 #@login_required
-<<<<<<< HEAD
-=======
 
->>>>>>> c3ab2541f71a76364d3b8edcf8ef786b3db7ef0a
 def bus_list(request):
     source = request.GET.get('source')
     destination = request.GET.get('destination')
@@ -246,13 +239,7 @@ def bus_list(request):
     return render(request, 'bus_list.html', {'buses': buses})
 
 
-<<<<<<< HEAD
 
-#@login_required
-=======
-#@login_required
-#@login_required
->>>>>>> c3ab2541f71a76364d3b8edcf8ef786b3db7ef0a
 def view_seats(request, bus_id):
 
     user_id = request.session.get('user_id')
@@ -299,11 +286,6 @@ def view_seats(request, bus_id):
         'all_seats_booked': all_seats_booked
     })
 
-<<<<<<< HEAD
-
-=======
->>>>>>> c3ab2541f71a76364d3b8edcf8ef786b3db7ef0a
-#@login_required
 def booking_summary(request):
     seat_ids = request.session.get('selected_seat_ids', [])
     seat_numbers = request.session.get('selected_seat_numbers', [])
@@ -316,13 +298,7 @@ def booking_summary(request):
         'total_price': total_price
     })
 
-<<<<<<< HEAD
 
-#@login_required
-=======
-#@login_required
-#@login_required
->>>>>>> c3ab2541f71a76364d3b8edcf8ef786b3db7ef0a
 def payment_form(request):
     bus_id = request.session.get('bus_id')
     seat_ids = request.session.get('selected_seat_ids', [])
@@ -387,11 +363,7 @@ def payment(request, bus_id):
     return render(request, 'payment.html', {
         'booked_seats': seat_numbers
     })
-<<<<<<< HEAD
 
-=======
->>>>>>> c3ab2541f71a76364d3b8edcf8ef786b3db7ef0a
-#@login_required
 def available_tours(request):
     query = request.GET.get('q', '')
     context = {'query': query}
@@ -408,11 +380,7 @@ def available_tours(request):
     return render(request, 'TourPackages.html', context)
 
 
-<<<<<<< HEAD
 
-
-=======
->>>>>>> c3ab2541f71a76364d3b8edcf8ef786b3db7ef0a
 #@login_required
 def tour_list(request):
     query = request.GET.get('q')  
