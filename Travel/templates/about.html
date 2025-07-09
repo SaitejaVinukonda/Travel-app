@@ -1,225 +1,174 @@
-{%load static%}
-<!DOCTYPE html>
-<html lang="en">
+{% extends './utils/base.html' %}
+{% load static %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>TRA-WELL - About Us</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
+{% block title %}TRA-WELL - About Us{% endblock %}
 
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+{% block content %}
 
-    <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+<style>
+    .about-section {
+        background-image: url("{% static 'images/7wonders.jpg'%}");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        margin-top: 80px;
+        min-height: 60vh;
+        padding: 60px 20px;
+        position: relative;
+        color: white;
+    }
 
-    <style>
-        .about-section {
-            background-image: url("{% static 'images/7wonders.jpg'%}");
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            margin-top: 80px;
-            min-height: 60vh;
-            padding: 60px 20px;
-            position: relative;
-            color: white;
+    .about-content {
+        background-color: rgba(0, 0, 0, 0.7);
+        padding: 30px;
+        border-radius: 10px;
+        max-width: 90%;
+        width: 100%;
+        margin: 0 auto;
+    }
+
+    .creator-card {
+        min-height: 430px;
+        width: 100%;
+    }
+
+    .creator-card img {
+        height: 320px;
+        object-fit: cover;
+        width: 100%;
+    }
+
+    @media (min-width: 1200px) {
+        .col-lg-2.custom-width {
+            flex: 0 0 20%;
+            max-width: 20%;
         }
+    }
 
-        .about-content {
-            background-color: rgba(0, 0, 0, 0.7);
-            padding: 30px;
-            border-radius: 10px;
-            max-width: 90%;
-            width: 100%;
-            margin: 0 auto;
-        }
+    .creator-card:hover img {
+        transform: scale(1.05);
+    }
 
-        .creator-card {
-            min-height: 430px;
-            width: 100%;
-        }
+    .creator-card:hover {
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        transition: box-shadow 0.3s ease-in-out;
+    }
 
-       
-        .creator-card img {
-            height: 320px;
-            object-fit: cover;
-            width: 100%;
-        }
+    .meet-the-creators {
+        background-color: rgb(254, 255, 255);
+        padding: 50px 20px;
+        color: white;
+    }
+</style>
 
-        @media (min-width: 1200px) {
-            .col-lg-2.custom-width {
-                flex: 0 0 20%;
-                max-width: 20%;
-            }
-        }
+<section class="about-section d-flex align-items-center justify-content-center text-center">
+    <div class="about-content" data-aos="fade-up">
+        <h2 class="text-info mb-3">About Us</h2>
+        <p class="lead">
+            TRA-WELL is your ultimate travel partner, offering curated experiences across India’s most beautiful
+            destinations. Our mission is to make your journey safe, joyful, and unforgettable. From serene landscapes
+            to vibrant cultures, we connect you to the heart of each place you visit.
+        </p>
+        <p class="lead">
+            At TRA-WELL, we’re passionate about making travel not just easier, but more meaningful. Our platform is
+            designed to help you explore India's rich heritage, natural beauty, and diverse cultures with ease and
+            confidence. Whether you're planning your first solo trip, a family vacation, or a spontaneous weekend
+            getaway, TRA-WELL is here to guide you every step of the way. We believe that every journey should be an
+            experience, and we’re committed to turning your travel dreams into lasting memories.
+        </p>
+        <p class="lead">TRA-WELL is your ultimate travel partner...</p>
+        <p class="lead">At TRA-WELL, we’re more than just a travel website—we’re a community of explorers...</p>
+        <p class="lead">Whether you're a solo traveler seeking adventure...</p>
+    </div>
+</section>
 
-
-        .creator-card:hover img {
-            transform: scale(1.05);
-        }
-
-        .creator-card:hover {
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-            transition: box-shadow 0.3s ease-in-out;
-        }
-
-        .meet-the-creators {
-            background-color: rgb(254, 255, 255);
-            padding: 30px;
-            color: white;
-            padding: 50px 20px;
-        }
-    </style>
-</head>
-
-<body>
-
-    <section class="about-section d-flex align-items-center justify-content-center text-center">
-        <div class="about-content" data-aos="fade-up">
-            <h2 class="text-info mb-3">About Us</h2>
-            <p class="lead">
-                TRA-WELL is your ultimate travel partner, offering curated experiences across India’s most beautiful
-                destinations.
-                Our mission is to make your journey safe, joyful, and unforgettable. From serene landscapes to vibrant
-                cultures,
-                we connect you to the heart of each place you visit.
-            </p>
-            <p class="lead">
-                At TRA-WELL, we’re passionate about making travel not just easier, but more meaningful. Our platform is
-                designed to help you explore India's rich heritage, natural beauty, and diverse cultures with ease and
-                confidence. Whether you're planning your first solo trip, a family vacation, or a spontaneous weekend
-                getaway, TRA-WELL is here to guide you every step of the way. We believe that every journey should be an
-                experience, and we’re committed to turning your travel dreams into lasting memories.
-            </p>
-            <p class="lead">
-                TRA-WELL is your ultimate travel partner...
-            </p>
-            <p class="lead">
-                At TRA-WELL, we’re more than just a travel website—we’re a community of explorers...
-            </p>
-            <p class="lead">
-                Whether you're a solo traveler seeking adventure...
-            </p>
-
-        </div>
-    </section>
-    <section class="why-choose-us text-center py-5">
-        <div class="container" data-aos="fade-up">
-            <h5 class="text-info mb-2" style="letter-spacing: 2px;">WHY CHOOSE US</h5>
-            <h2 class="fw-bold mb-4">Get The Best Travel Experience</h2>
-            <div class="row align-items-center">
-
-                <div class="col-md-3 text-md-end mb-4 mb-md-0">
-                    <div class="mb-4">
-                        <div class="mb-2"><i class="fa-solid fa-calendar-days fa-2x text-info"></i></div>
-                        <h5 class="fw-bold">Set Travel Plan</h5>
-                        <p class="small text-muted">Distinctively impact client-centered ideas via future-proof
-                            paradigms.</p>
-                    </div>
-                    <div>
-                        <div class="mb-2"><i class="fa-solid fa-hotel fa-2x text-info"></i></div>
-                        <h5 class="fw-bold">Luxury Hotel</h5>
-                        <p class="small text-muted">Distinctively impact client-centered ideas via future-proof
-                            paradigms.</p>
-                    </div>
+<section class="why-choose-us text-center py-5">
+    <div class="container" data-aos="fade-up">
+        <h5 class="text-info mb-2" style="letter-spacing: 2px;">WHY CHOOSE US</h5>
+        <h2 class="fw-bold mb-4">Get The Best Travel Experience</h2>
+        <div class="row align-items-center">
+            <div class="col-md-3 text-md-end mb-4 mb-md-0">
+                <div class="mb-4">
+                    <div class="mb-2"><i class="fa-solid fa-calendar-days fa-2x text-info"></i></div>
+                    <h5 class="fw-bold">Set Travel Plan</h5>
+                    <p class="small text-muted">Distinctively impact client-centered ideas via future-proof paradigms.</p>
                 </div>
-
-
-                <div class="col-md-6">
-                    <img src="{% static 'images/about_4.jpg' %}" alt="Why Choose Us" class="img-fluid rounded shadow" />
-                </div>
-
-                <div class="col-md-3 text-md-start mt-4 mt-md-0">
-                    <div class="mb-4">
-                        <div class="mb-2"><i class="fa-solid fa-compass fa-2x text-info"></i></div>
-                        <h5 class="fw-bold">Explore Around</h5>
-                        <p class="small text-muted">Distinctively impact client-centered ideas via future-proof
-                            paradigms.</p>
-                    </div>
-                    <div>
-                        <div class="mb-2"><i class="fa-solid fa-headset fa-2x text-info"></i></div>
-                        <h5 class="fw-bold">Support 24/7</h5>
-                        <p class="small text-muted">Distinctively impact client-centered ideas via future-proof
-                            paradigms.</p>
-                    </div>
+                <div>
+                    <div class="mb-2"><i class="fa-solid fa-hotel fa-2x text-info"></i></div>
+                    <h5 class="fw-bold">Luxury Hotel</h5>
+                    <p class="small text-muted">Distinctively impact client-centered ideas via future-proof paradigms.</p>
                 </div>
             </div>
-        </div>
-    </section>
 
+            <div class="col-md-6">
+                <img src="{% static 'images/about_4.jpg' %}" alt="Why Choose Us" class="img-fluid rounded shadow" />
+            </div>
 
-    <div class="container">
-        <div class="row justify-content-center g-4">
-            <div class="col-6 col-sm-4 col-md-3 col-lg-2 custom-width" data-aos="zoom-in">
-                <div class="card shadow creator-card h-100">
-                    <img src="{% static 'images/sai.jpg' %}" class="card-img-top" alt="Sai Teja">
-                    <div class="card-body text-center">
-                        <h5 class="card-title">SAI TEJA</h5>
-                        <a href="https://linkedin.com/saiteja" class="btn btn-outline-primary btn-sm"
-                            target="_blank">LinkedIn</a>
-                    </div>
+            <div class="col-md-3 text-md-start mt-4 mt-md-0">
+                <div class="mb-4">
+                    <div class="mb-2"><i class="fa-solid fa-compass fa-2x text-info"></i></div>
+                    <h5 class="fw-bold">Explore Around</h5>
+                    <p class="small text-muted">Distinctively impact client-centered ideas via future-proof paradigms.</p>
                 </div>
-            </div>
-            <div class="col-6 col-sm-4 col-md-3 col-lg-2 custom-width" data-aos="zoom-in">
-                <div class="card shadow creator-card h-100">
-                    <img src="{% static 'images/Bhavana.jpg' %}" class="card-img-top" alt="Bhavana">
-                    <div class="card-body text-center">
-                        <h5 class="card-title">BHAVANA</h5>
-                        <a href="https://linkedin.com/bhavana" class="btn btn-outline-primary btn-sm"
-                            target="_blank">LinkedIn</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-6 col-sm-4 col-md-3 col-lg-2 custom-width" data-aos="zoom-in">
-                <div class="card shadow creator-card h-100">
-                    <img src="{% static 'images/janaki.jpg' %}" class="card-img-top" alt="Janaki">
-                    <div class="card-body text-center">
-                        <h5 class="card-title">JANAKI RAM</h5>
-                        <a href="https://linkedin.com/janaki" class="btn btn-outline-primary btn-sm"
-                            target="_blank">LinkedIn</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-6 col-sm-4 col-md-3 col-lg-2 custom-width" data-aos="zoom-in">
-                <div class="card shadow creator-card h-100">
-                    <img src="{% static 'images/pikasu.jpg' %}" class="card-img-top" alt="Surya Prakash">
-                    <div class="card-body text-center">
-                        <h5 class="card-title">SURYA PRAKASH</h5>
-                        <a href="https://linkedin.com/suryaprakash" class="btn btn-outline-primary btn-sm"
-                            target="_blank">LinkedIn</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-6 col-sm-4 col-md-3 col-lg-2 custom-width" data-aos="zoom-in">
-                <div class="card shadow creator-card h-100">
-                    <img src="{% static 'images/prakeerth.jpg' %}" class="card-img-top" alt="PRAKEERTH">
-                    <div class="card-body text-center">
-                        <h5 class="card-title">PRAKEERTH</h5>
-                        <a href="https://linkedin.com/newcreator" class="btn btn-outline-primary btn-sm"
-                            target="_blank">LinkedIn</a>
-                    </div>
+                <div>
+                    <div class="mb-2"><i class="fa-solid fa-headset fa-2x text-info"></i></div>
+                    <h5 class="fw-bold">Support 24/7</h5>
+                    <p class="small text-muted">Distinctively impact client-centered ideas via future-proof paradigms.</p>
                 </div>
             </div>
         </div>
     </div>
+</section>
 
+<div class="container py-5">
+    <div class="row justify-content-center g-4">
+       
+        <div class="col-6 col-sm-4 col-md-3 col-lg-2 custom-width" data-aos="zoom-in">
+            <div class="card shadow creator-card h-100">
+                <img src="{% static 'images/sai.jpg' %}" class="card-img-top" alt="Sai Teja">
+                <div class="card-body text-center">
+                    <h5 class="card-title">SAI TEJA</h5>
+                    <a href="https://linkedin.com/saiteja" class="btn btn-outline-primary btn-sm" target="_blank">LinkedIn</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-sm-4 col-md-3 col-lg-2 custom-width" data-aos="zoom-in">
+            <div class="card shadow creator-card h-100">
+                <img src="{% static 'images/Bhavana.jpg' %}" class="card-img-top" alt="Bhavana">
+                <div class="card-body text-center">
+                    <h5 class="card-title">BHAVANA</h5>
+                    <a href="https://linkedin.com/bhavana" class="btn btn-outline-primary btn-sm" target="_blank">LinkedIn</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-sm-4 col-md-3 col-lg-2 custom-width" data-aos="zoom-in">
+            <div class="card shadow creator-card h-100">
+                <img src="{% static 'images/janaki.jpg' %}" class="card-img-top" alt="Janaki">
+                <div class="card-body text-center">
+                    <h5 class="card-title">JANAKI RAM</h5>
+                    <a href="https://linkedin.com/janaki" class="btn btn-outline-primary btn-sm" target="_blank">LinkedIn</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-sm-4 col-md-3 col-lg-2 custom-width" data-aos="zoom-in">
+            <div class="card shadow creator-card h-100">
+                <img src="{% static 'images/pikasu.jpg' %}" class="card-img-top" alt="Surya Prakash">
+                <div class="card-body text-center">
+                    <h5 class="card-title">SURYA PRAKASH</h5>
+                    <a href="https://linkedin.com/suryaprakash" class="btn btn-outline-primary btn-sm" target="_blank">LinkedIn</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-sm-4 col-md-3 col-lg-2 custom-width" data-aos="zoom-in">
+            <div class="card shadow creator-card h-100">
+                <img src="{% static 'images/prakeerth.jpg' %}" class="card-img-top" alt="PRAKEERTH">
+                <div class="card-body text-center">
+                    <h5 class="card-title">PRAKEERTH</h5>
+                    <a href="https://linkedin.com/newcreator" class="btn btn-outline-primary btn-sm" target="_blank">LinkedIn</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-
-
-
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO"
-        crossorigin="anonymous"></script>
-
-    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
-    <script>
-        AOS.init({
-            duration: 1000,
-            once: true,
-        });
-    </script>
-</body>
-
-</html>
+{% endblock %}
