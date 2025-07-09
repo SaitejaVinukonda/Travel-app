@@ -165,6 +165,15 @@
       transform: scale(1.05);
     }
 
+    .custom-alert {
+      background: linear-gradient(to right, #43cea2, #185a9d);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-weight: 500;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+
     @keyframes fadeZoomIn {
       0% { opacity: 0; transform: scale(.8) translateY(30px) }
       100% { opacity: 1; transform: scale(1) translateY(0) }
@@ -198,9 +207,9 @@
 {% if messages %}
   <div class="container mt-3">
     {% for message in messages %}
-      <div class="alert alert-success alert-dismissible fade show" role="alert">
+      <div class="alert custom-alert alert-dismissible fade show" role="alert">
         {{ message }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
       </div>
     {% endfor %}
   </div>
@@ -277,6 +286,16 @@
     &copy; 2025 TRA-WELL Tourism. All rights reserved.
   </div>
 </footer>
+
+<script>
+  setTimeout(() => {
+    const alert = document.querySelector('.alert');
+    if (alert) {
+      alert.classList.remove('show');
+      alert.classList.add('fade');
+    }
+  }, 4000);
+</script>
 
 </body>
 </html>
