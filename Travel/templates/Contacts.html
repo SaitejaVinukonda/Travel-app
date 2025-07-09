@@ -1,6 +1,6 @@
+{% extends './utils/base.html'%}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
+{% block content%}
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -195,12 +195,6 @@
 
 <header>
   <div class="d-flex justify-content-between align-items-center text-white px-4 py-4" style="background-color:#17a2b8;">
-    <div class="fs-5 fw-semibold">TRA-WELL Tourism</div>
-    <div>
-      <a href="#" class="text-white me-3"><i class="fab fa-instagram"></i></a>
-      <a href="#" class="text-white me-3"><i class="fab fa-facebook-f"></i></a>
-      <a href="#" class="text-white"><i class="fab fa-x-twitter"></i></a>
-    </div>
   </div>
 </header>
 
@@ -276,17 +270,6 @@
     </form>
   </div>
 </main>
-
-<footer class="footer-main text-white pt-4">
-  <div class="container text-center">
-    <p class="mb-1 fw-semibold fs-5">TRA-WELL Tourism</p>
-    <p class="mb-0">Designed with ❤️ by the TRA-WELL Team</p>
-  </div>
-  <div class="footer-bottom text-center py-2 mt-3">
-    &copy; 2025 TRA-WELL Tourism. All rights reserved.
-  </div>
-</footer>
-
 <script>
   setTimeout(() => {
     const alert = document.querySelector('.alert');
@@ -299,3 +282,4 @@
 
 </body>
 </html>
+{% endblock %}
