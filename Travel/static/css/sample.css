@@ -61,6 +61,11 @@ button
     cursor: pointer;
     font-weight: bold;
 }
+.same-width
+{
+   min-width: 100px;
+   text-align: center; 
+}
 p{
     text-align: center;
     font-size: 14px;
