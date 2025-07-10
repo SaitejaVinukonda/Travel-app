@@ -180,26 +180,6 @@ def verify_otp(request):
    
 #def enter_otp(request, email):
 #    return render(request, 'otp.html', {'email': email})
-def forgot_password(request):
-    message = error = ''
-    if request.method == 'POST':
-        email = request.POST.get('email')
-        user = CustomUser.objects.filter(email=email).first()
-        if user:
-            reset_link = f"http://127.0.0.1:8000/reset-password/{user.id}/"
-            send_mail(
-                'Password Reset Request',
-                f'Click the link to reset your password: {reset_link}',
-                'your_email@gmail.com',  
-                [email],
-                fail_silently=False,
-            )
-            message = 'Password reset link sent to your email.'
-        else:
-            error = 'Email not found.'
-    return render(request, 'forgot_password.html', {'message': message, 'error': error})
-
-
 def reset_password(request, user_id):
     error = success = ''
     if request.method == 'POST':
